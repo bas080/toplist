@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <title>Top List</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍒</text></svg>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#228b22" />
     <meta name="apple-mobile-web-app-status-bar" content="#228b22" />
@@ -11,7 +13,8 @@
       content="Top list helps you focus on what matters while collaborating."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="TopList App" />
+    <meta property="og:title" content="Top List 🍒" />
+
     <meta
       property="og:description"
       content="Manage and share your lists with TopList App."
@@ -849,7 +852,7 @@
       ({ created, items }, index) =>
         html` <article>
           ${isTopList
-            ? html`<h1 id="toplist">TopList</h1>`
+            ? html`<h1 id="toplist">Top List 🍒</h1>`
             : html`<h2>${toLocaleString(created)}</h2>`}
           <ul class="list ${isTopList && "list-top"}">
             ${isTopList
