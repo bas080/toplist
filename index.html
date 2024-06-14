@@ -898,7 +898,13 @@
             <summary>List</summary>
 
             ${isTopList
-              ? null
+              ? html`
+                  <section>
+                    <p>Archive top list and create new one.</p>
+                    <button @click="${createList}">Archive</button>
+                  </section>
+
+              `
               : html`
                   <section>
                     <p>Merge into top list.</p>
@@ -936,9 +942,6 @@
     const app = () =>
       html` <details>
           <summary>Settings</summary>
-          <form @submit=${createList}>
-            <input type="submit" value="Create new list" />
-          </form>
           <button>Export</button>
           <button>Import</button>
           <button @click="${clearCache}">Update App</button>

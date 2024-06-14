@@ -25,7 +25,13 @@
           <details>
             <summary>List</summary>
 
-            ${e?null:k`
+            ${e?k`
+                  <section>
+                    <p>Archive top list and create new one.</p>
+                    <button @click="${ee}">Archive</button>
+                  </section>
+
+              `:k`
                   <section>
                     <p>Merge into top list.</p>
                     <a class="button" href="${ec(o)}">🔃 Merge</a>
@@ -52,9 +58,6 @@
           </details>
         </article>`,ed=e=>!e||0!==e.length,eD=e=>i=>i.filter(({items:i})=>e||ed(i)).map(eu(e)),el=()=>k` <details>
           <summary>Settings</summary>
-          <form @submit=${ee}>
-            <input type="submit" value="Create new list" />
-          </form>
           <button>Export</button>
           <button>Import</button>
           <button @click="${ea}">Update App</button>
