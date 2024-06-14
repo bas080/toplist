@@ -7,7 +7,7 @@
         <form @submit=${K(i,e,o)}>
           <button>${i} ${W(i)}</button>
         </form>
-      </li>`,X=e=>i=>i.map(Q(e)),Y=i=>{if(i.preventDefault(),0===e.lists[0].items.length){window.toplist.scrollIntoView(),window.addItemInput.focus();return}e.lists.unshift(Z()),window.toplist.scrollIntoView(),el()},ee=i=>{i.preventDefault();let o=i.target.querySelector("input");e.lists[0].items.unshift(o.value),o.value="",el()},ei=async e=>{if(navigator.clipboard&&navigator.clipboard.writeText)try{await navigator.clipboard.writeText(e),console.log("Text successfully copied to clipboard")}catch(i){console.error("Failed to copy text using Clipboard API: ",i),eo(e)}else console.warn("Clipboard API not supported. Falling back to prompt."),eo(e)},eo=e=>{try{prompt("Copy the text below:",e),console.log("Text successfully copied to clipboard via prompt")}catch(e){console.error("Failed to copy text via prompt: ",e)}},et=e=>()=>{alert("download")},en=e=>()=>{alert("copy")},es=()=>{"serviceWorker"in navigator&&navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage({action:"clearCache"})},ea=e=>{let i=new URL(window.location.pathname,window.location.origin);return i.searchParams.append("append",JSON.stringify(e)),i.toString()},ec=e=>()=>{ei(ea(e))},eu=e=>({created:i,items:o},t)=>k` <article>
+      </li>`,X=e=>i=>i.map(Q(e)),Y=i=>{if(i.preventDefault(),0===e.lists[0].items.length){window.toplist.scrollIntoView(),window.addItemInput.focus();return}e.lists.unshift(Z()),window.toplist.scrollIntoView(),el()},ee=i=>{i.preventDefault();let o=i.target.querySelector("input");e.lists[0].items.unshift(o.value),o.value="",el()},ei=async e=>{if(navigator.clipboard&&navigator.clipboard.writeText)try{await navigator.clipboard.writeText(e),console.log("Text successfully copied to clipboard")}catch(i){console.error("Failed to copy text using Clipboard API: ",i),eo(e)}else console.warn("Clipboard API not supported. Falling back to prompt."),eo(e)},eo=e=>{try{prompt("Copy the text below:",e),console.log("Text successfully copied to clipboard via prompt")}catch(e){console.error("Failed to copy text via prompt: ",e)}},et=e=>()=>{alert("download")},en=e=>()=>{alert("copy")},es=()=>{"serviceWorker"in navigator&&navigator.serviceWorker.controller&&navigator.serviceWorker.controller.postMessage({action:"clearCache"})},ea=e=>{let i=new URL(window.location.pathname,window.location.origin);return i.searchParams.append("append",JSON.stringify(e)),i.toString()},ec=e=>i=>{i.preventDefault(),ei(ea(e))},eu=e=>({created:i,items:o},t)=>k` <article>
           ${e?k`<h1 id="toplist">Top List 🍒</h1>`:k`<h2>${G(i)}</h2>`}
           <ul class="list ${e&&"list-top"}">
             ${e?k`<li>
@@ -35,7 +35,7 @@
             <section>
               <p>Creates a link that appends the list items.</p>
               <p>Use it to share your list with someone's toplist.</p>
-              <button @click="${ec(o)}">Share</button>
+              <a @href="${ea(o)}" @click="${ec(o)}">Share</a>
             </section>
 
             <\!--
