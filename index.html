@@ -948,6 +948,7 @@
     rerender();
   </script>
   <script type="module">
+    console.log(new URL("./serviceWorker.js", import.meta.url).toString())
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
         navigator.serviceWorker
