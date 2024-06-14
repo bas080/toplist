@@ -701,7 +701,15 @@
     import { html, render } from "lit-html";
     import emojiMap from "./emoji.json";
     import levenshtein from "js-levenshtein";
-    import { version } from './package.json';
+    import { version } from "./package.json";
+
+    const memoize = (fn) => {
+      const cache = {};
+      return (value, ...rest) => {
+        if (value in cache) return cache[value];
+        return (cache[value] = fn(value, ...rest));
+      };
+    };
 
     const emojiByTag = emojiMap.names.reduce((acc, name) => {
       name.tags.split(":").forEach((tag) => {
@@ -720,13 +728,13 @@
         valueFn(item) > valueFn(current) ? item : current,
       );
 
-    const someEmoji = (value) => {
+    const someEmoji = memoize((value) => {
       if (!value) return null;
 
       return findMax(([tag]) => {
         return -levenshtein(tag, value);
       }, emojiByTag)[1].unicode;
-    };
+    });
 
     const head = (a) => (a.length ? [a[0]] : []);
     const rest = ([, ...b]) => b;
@@ -865,7 +873,7 @@
     };
 
     const share = (items) => (event) => {
-      event.preventDefault()
+      event.preventDefault();
 
       clipboard(shareUrl(items));
     };
@@ -903,8 +911,7 @@
                     <p>Archive top list and create new one.</p>
                     <button @click="${createList}">Archive</button>
                   </section>
-
-              `
+                `
               : html`
                   <section>
                     <p>Merge into top list.</p>
@@ -915,7 +922,12 @@
             <section>
               <p>Creates a link that appends the list items.</p>
               <p>Use it to share your list with someone's toplist.</p>
-              <a class="button" href="${shareUrl(items)}" @click="${share(items)}">Share</a>
+              <a
+                class="button"
+                href="${shareUrl(items)}"
+                @click="${share(items)}"
+                >Share</a
+              >
             </section>
 
             <!--
@@ -957,7 +969,7 @@
     rerender();
   </script>
   <script type="module">
-    console.log(new URL("./serviceWorker.js", import.meta.url).toString())
+    console.log(new URL("./serviceWorker.js", import.meta.url).toString());
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
         navigator.serviceWorker
