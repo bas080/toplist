@@ -634,6 +634,10 @@
     </style>
 
     <style>
+      .subtle {
+        font-style: italic;
+        opacity: 0.8;
+      }
       body h1 {
         font-size: 2rem;
         margin: unset;
@@ -938,7 +942,7 @@
           <button>Export</button>
           <button>Import</button>
           <button @click="${clearCache}">Update App</button>
-          <p>Top List v${version}</p>
+          <p class="subtle">Top List v${version}</p>
         </details>
         ${lists(true)(head(data.lists))} ${lists(false)(rest(data.lists))}`;
 
