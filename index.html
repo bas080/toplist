@@ -697,6 +697,7 @@
     import { html, render } from "lit-html";
     import emojiMap from "./emoji.json";
     import levenshtein from "js-levenshtein";
+    import { version } from './package.json';
 
     const emojiByTag = emojiMap.names.reduce((acc, name) => {
       name.tags.split(":").forEach((tag) => {
@@ -930,13 +931,14 @@
 
     const app = () =>
       html` <details>
-          <summary>Lists</summary>
+          <summary>Settings</summary>
           <form @submit=${createList}>
             <input type="submit" value="Create new list" />
           </form>
           <button>Export</button>
           <button>Import</button>
           <button @click="${clearCache}">Update App</button>
+          <p>Top List v${version}</p>
         </details>
         ${lists(true)(head(data.lists))} ${lists(false)(rest(data.lists))}`;
 
