@@ -25,7 +25,13 @@
           <details>
             <summary>List</summary>
 
-            ${e?null:k`
+            ${e?k`
+                  <section>
+                    <p>Archive top list and create new one.</p>
+                    <button @click="${ee}">Archive</button>
+                  </section>
+
+              `:k`
                   <section>
                     <p>Merge into top list.</p>
                     <a class="button" href="${ec(o)}">🔃 Merge</a>
