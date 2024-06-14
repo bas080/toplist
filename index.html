@@ -703,6 +703,23 @@
     import levenshtein from "js-levenshtein";
     import { version } from "./package.json";
 
+    // Version the localStorage in case of migrations.
+    if (!window.localStorage.version) {
+      window.localStorage.version = version
+    }
+
+    (async function() {
+      if (!window.localStorage.username) {
+        const ung = await import('unique-names-generator')
+        const { uniqueNamesGenerator, colors, animals } = require('unique-names-generator');
+
+        window.localStorage.username = uniqueNamesGenerator({
+          dictionaries: [colors, animals],
+          length: 2,
+        });
+      }
+    })();
+
     const memoize = (fn) => {
       const cache = {};
       return (value, ...rest) => {
