@@ -3,7 +3,10 @@
   <head>
     <title>Top List</title>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍒</text></svg>">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍒</text></svg>"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#228b22" />
     <meta name="apple-mobile-web-app-status-bar" content="#228b22" />
@@ -693,23 +696,31 @@
   <script type="module">
     import { html, render } from "lit-html";
     import emojiMap from "./emoji.json";
+    import levenshtein from "js-levenshtein";
+
+    const emojiByTag = emojiMap.names.reduce((acc, name) => {
+      name.tags.split(":").forEach((tag) => {
+        acc.push([tag, name]);
+      });
+
+      return acc;
+    }, []);
 
     setTimeout(() => {
       window.location.hash = "#toplist";
     }, 500);
 
-    emojiMap.names.sort((a, b) => {
-      a.tagsArr = a.tags.split(":");
-      b.tagsArr = b.tags.split(":");
-
-      return b.emoji.length - a.emoji.length;
-    });
+    const findMax = (valueFn, array) =>
+      array.reduce((current, item) =>
+        valueFn(item) > valueFn(current) ? item : current,
+      );
 
     const someEmoji = (value) => {
       if (!value) return null;
-      return emojiMap.names.find(({ tagsArr }) =>
-        tagsArr.some((tag) => tag.includes(value.trim().toLowerCase())),
-      )?.unicode;
+
+      return findMax(([tag]) => {
+        return -levenshtein(tag, value);
+      }, emojiByTag)[1].unicode;
     };
 
     const head = (a) => (a.length ? [a[0]] : []);
@@ -841,10 +852,15 @@
       }
     };
 
-    const share = (items) => () => {
+    const shareUrl = (items) => {
       const url = new URL(window.location.pathname, window.location.origin);
       url.searchParams.append("append", JSON.stringify(items));
-      clipboard(url.toString());
+
+      return url.toString();
+    };
+
+    const share = (items) => () => {
+      clipboard(shareUrl(items));
     };
 
     const list =
@@ -866,20 +882,30 @@
               : null}
             ${items.length
               ? listItems(isTopList)(items)
-              : html`<em
-                  >New empty list. Start adding items. Click an item to remove
+              : html`<em>
+                  New empty list. Start adding items. Click an item to remove
                   it.</em
                 >`}
           </ul>
           <details>
-            <summary>Download/Share</summary>
+            <summary>List</summary>
+
+            ${isTopList
+              ? null
+              : html`
+                  <section>
+                    <p>Merge into top list.</p>
+                    <a class="button" href="${shareUrl(items)}">🔃 Merge</a>
+                  </section>
+                `}
 
             <section>
               <p>Creates a link that appends the list items.</p>
-              <p>Use it to share your list with someone's toplist</p>
+              <p>Use it to share your list with someone's toplist.</p>
               <button @click="${share(items)}">Share</button>
             </section>
 
+            <!--
             <section>
               <p>Copy the complete list. Each item is on a newline.</p>
               <button @click="${copy(items)}">Text</button>
@@ -889,6 +915,7 @@
               <p>Download as a text file. Each item is on a newline.</p>
               <button @click="${download(items)}">Download</button>
             </section>
+            -->
           </details>
         </article>`;
 
@@ -900,9 +927,8 @@
         .map(list(isTopList));
 
     const app = () =>
-      html` ${lists(true)(head(data.lists))}
-        <details>
-          <summary>Actions</summary>
+      html` <details>
+          <summary>Lists</summary>
           <form @submit=${createList}>
             <input type="submit" value="Create new list" />
           </form>
@@ -910,7 +936,7 @@
           <button>Import</button>
           <button @click="${clearCache}">Update App</button>
         </details>
-        ${lists(false)(rest(data.lists))}`;
+        ${lists(true)(head(data.lists))} ${lists(false)(rest(data.lists))}`;
 
     function rerender() {
       localStorage.data = JSON.stringify(data);
