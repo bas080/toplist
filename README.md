@@ -64,3 +64,10 @@ planning to do next time.
 As someone that imports a list
 i would like to be able to pick how to import it
 so that I have granular control over what happens to my top list.
+
+### Add username to list items
+
+A user name is generated on first time visit and optionally edited. This
+username is assigned to every list item. That way it is possible to derive the
+author of the list item. This enables features like submitting talking points
+during retrospectives.
