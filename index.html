@@ -28,7 +28,7 @@
       content="https://www.example.com/images/toplist-icon.png"
     />
 
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="./manifest.webmanifest" />
     <!-- ios support
     <link rel="apple-touch-icon" href="images/icons/icon-72x72.png" />
     <link rel="apple-touch-icon" href="images/icons/icon-96x96.png" />
@@ -634,6 +634,10 @@
     </style>
 
     <style>
+      .subtle {
+        font-style: italic;
+        opacity: 0.8;
+      }
       body h1 {
         font-size: 2rem;
         margin: unset;
@@ -697,6 +701,7 @@
     import { html, render } from "lit-html";
     import emojiMap from "./emoji.json";
     import levenshtein from "js-levenshtein";
+    import { version } from './package.json';
 
     const emojiByTag = emojiMap.names.reduce((acc, name) => {
       name.tags.split(":").forEach((tag) => {
@@ -859,7 +864,9 @@
       return url.toString();
     };
 
-    const share = (items) => () => {
+    const share = (items) => (event) => {
+      event.preventDefault()
+
       clipboard(shareUrl(items));
     };
 
@@ -902,7 +909,7 @@
             <section>
               <p>Creates a link that appends the list items.</p>
               <p>Use it to share your list with someone's toplist.</p>
-              <button @click="${share(items)}">Share</button>
+              <a class="button" href="${shareUrl(items)}" @click="${share(items)}">Share</a>
             </section>
 
             <!--
@@ -928,13 +935,14 @@
 
     const app = () =>
       html` <details>
-          <summary>Lists</summary>
+          <summary>Settings</summary>
           <form @submit=${createList}>
             <input type="submit" value="Create new list" />
           </form>
           <button>Export</button>
           <button>Import</button>
           <button @click="${clearCache}">Update App</button>
+          <p class="subtle">Top List v${version}</p>
         </details>
         ${lists(true)(head(data.lists))} ${lists(false)(rest(data.lists))}`;
 
@@ -946,10 +954,11 @@
     rerender();
   </script>
   <script type="module">
+    console.log(new URL("./serviceWorker.js", import.meta.url).toString())
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
         navigator.serviceWorker
-          .register(new URL("/serviceWorker.js", import.meta.url))
+          .register(new URL("./serviceWorker.js", import.meta.url))
           .then((res) => console.log("service worker registered"))
           .catch((err) => console.log("service worker not registered", err));
       });
