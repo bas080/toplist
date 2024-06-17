@@ -1,6 +1,6 @@
 {
   "name": "toplist",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "author": "",
   "license": "ISC",
   "description": "",
@@ -21,7 +21,8 @@
   "targets": {
     "default": {
       "source": "./index.html",
-      "distDir": "./docs"
+      "distDir": "./docs",
+      "publicUrl": "/toplist"
     }
   }
 }
