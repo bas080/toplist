@@ -4,7 +4,6 @@ import levenshtein from "js-levenshtein";
 import { version } from "./package.json";
 import { memoize, findMax, head, rest, tryReject } from "./util.mjs";
 
-
 // RENDER ERRORS
 
 const rendered = Symbol("rendered");
