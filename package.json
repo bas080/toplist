@@ -15,14 +15,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx parcel build",
+    "build": "npx parcel build --public-url /toplist",
     "serve": "npx parcel serve"
   },
   "targets": {
     "default": {
       "source": "./index.html",
-      "distDir": "./docs",
-      "publicUrl": "/toplist"
+      "distDir": "./docs"
     }
   }
 }
