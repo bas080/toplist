@@ -81,10 +81,6 @@ li.list-item button:hover,
   border-color: var(--text);
 }
 
-dialog::backdrop {
-  background: #00000033;
-}
-
 #dialog {
   min-width: min(45rem,90%);
 }
@@ -92,4 +88,11 @@ dialog::backdrop {
 .notice--assertive {
   --accent-bg: lightpink;
   --border: indianred;
+}
+.float-right {
+  float: right;
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
 }

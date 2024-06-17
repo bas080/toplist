@@ -299,8 +299,10 @@ tryReject(function () {
 
     window.dialog.showModal();
 
-    url.searchParams.delete("append");
-    window.history.replaceState(null, document.title, url.toString());
+    window.dialog.addEventListener('close', () => {
+      url.searchParams.delete("append");
+      window.history.replaceState(null, document.title, url.toString());
+    }, {once: true})
   }
 });
 
