@@ -297,12 +297,26 @@ tryReject(function () {
       window.preview,
     );
 
-    window.dialog.showModal();
+    const { dialog } = window
 
-    window.dialog.addEventListener('close', () => {
+    dialog.showModal();
+
+    dialog.addEventListener('close', () => {
       url.searchParams.delete("append");
       window.history.replaceState(null, document.title, url.toString());
     }, {once: true})
+
+    function onClick(event) {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    }
+
+    dialog.addEventListener("click", event => {
+      if (event.target == dialog) dialog.close()
+    }, {once: true});
+
+    dialog.showModal();
   }
 });
 
