@@ -4,6 +4,42 @@ import levenshtein from "js-levenshtein";
 import { version } from "./package.json";
 import { memoize, findMax, head, rest, tryReject } from "./util.mjs";
 
+
+// RENDER ERRORS
+
+const rendered = Symbol("rendered");
+
+function renderError(error) {
+  render(
+    html`
+      <p class="notice notice--assertive">
+        ${error?.message ?? "An unknown error occurred."}
+        <button @click=${clearCache}>Hard Refresh App</button>
+      </p>
+    `,
+    window.error,
+  );
+}
+
+window.addEventListener("unhandledrejection", function (event) {
+  renderError(event);
+  console.error(event);
+});
+
+window.addEventListener(
+  "error",
+  (event) => {
+    if (event[rendered]) return;
+
+    event[rendered] = true;
+    renderError(event);
+    throw event;
+  },
+  true,
+);
+
+// RENDER ERRORS
+
 (async function initialize() {
   if (window.localStorage.version !== version) {
     const { migrate } = await import("./migrate.mjs");
@@ -137,6 +173,7 @@ const clearCache = () => {
       action: "clearCache",
     });
   }
+  location.reload()
 };
 
 const shareUrl = (items) => {
@@ -238,17 +275,6 @@ function rerender() {
   render(app(), window.app);
 }
 
-function renderError(error) {
-  render(
-    html`
-      <p class="notice notice--assertive">
-        ${error?.message ?? "An unknown error occurred."}
-      </p>
-    `,
-    window.error,
-  );
-}
-
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
     navigator.serviceWorker
@@ -279,21 +305,3 @@ tryReject(function () {
   }
 });
 
-const rendered = Symbol("rendered");
-
-window.addEventListener("unhandledrejection", function (event) {
-  renderError(event);
-  console.error(event);
-});
-
-window.addEventListener(
-  "error",
-  (event) => {
-    if (event[rendered]) return;
-
-    event[rendered] = true;
-    renderError(event);
-    throw event;
-  },
-  true,
-);
