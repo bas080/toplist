@@ -1,0 +1,2 @@
+var e=globalThis.parcelRequire554f;(0,e.register)("hCNrh",function(r,i){Object.defineProperty(r.exports,"migrate",{get:()=>a,set:void 0,enumerable:!0,configurable:!0});var t=e("9oYre");class n extends Error{}async function a(e,r,i){if(r===i)return;let o=e[r];if((0,t.isNil)(o))throw new n(`No migration defined for ${r}. Migrating to ${i} failed.`);return a(e,await o(i),i)}});
+//# sourceMappingURL=migrate.e9ada73f.js.map
