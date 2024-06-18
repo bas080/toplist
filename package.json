@@ -20,8 +20,7 @@
   },
   "targets": {
     "default": {
-      "source": "./index.html",
-      "distDir": "./docs"
+      "source": "./index.html"
     }
   }
 }
