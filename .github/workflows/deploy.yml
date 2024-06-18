@@ -31,6 +31,8 @@ jobs:
       run: ls -la ./dist  # Adjust path if necessary
 
     - name: Deploy to GitHub Pages
+      permissions:
+        contents: write
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
