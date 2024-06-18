@@ -11,6 +11,97 @@ so that I can copy urls and paste them elsewhere.</p>
 button. Having a copy button in a button is not ideal.</p>
 </blockquote>
 </article>
+<article><a class='straw-bookmark' id='share_list_items_using_qr_code.md' href='#share_list_items_using_qr_code.md'>🔖 open/share_list_items_using_qr_code.md</a><h1 id="share-list-items-using-qr-code">Share List Items Using QR Code</h1>
+<h2 id="as-a-user">As a user</h2>
+<p>I want to generate a QR code for my top list
+So that I can easily share it with others without using a URL.</p>
+<h2 id="acceptance-criteria">Acceptance Criteria</h2>
+<ol>
+<li>
+<p><strong>Generate QR Code</strong></p>
+<ul>
+<li>When a user clicks the &quot;Share via QR Code&quot; button, a QR code representing the current top list URL is generated and displayed.
+</li>
+<li>The QR code accurately encodes the URL containing the data of the current top list.
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Display QR Code</strong></p>
+<ul>
+<li>The generated QR code is displayed prominently on the screen.
+</li>
+<li>There is an option to download the QR code image for offline sharing.
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Scan QR Code</strong></p>
+<ul>
+<li>When another user scans the QR code with a QR code reader, they are redirected to the URL encoded in the QR code.
+</li>
+<li>Upon opening the URL, the user is prompted with a preview mode showing the shared list items.
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Preview Mode</strong></p>
+<ul>
+<li>In preview mode, the user can view the list items from the shared top list.
+</li>
+<li>The user is given options to select specific items or add all items to their own top list.
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Add Items from Preview Mode</strong></p>
+<ul>
+<li>The user can choose to add selected items to their top list directly from the preview mode.
+</li>
+<li>The items are added to the user's top list and persisted in their browser's <code>localStorage</code>.
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="tasks">Tasks</h2>
+<ol>
+<li>
+<p><strong>Backend/Functionality</strong></p>
+<ul>
+<li>Implement a function to generate a QR code from the top list URL.
+</li>
+<li>Ensure the generated QR code accurately represents the top list URL and data.
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Frontend/UI</strong></p>
+<ul>
+<li>Add a &quot;Share via QR Code&quot; button in the user interface.
+</li>
+<li>Create a modal or section to display the generated QR code.
+</li>
+<li>Add a download button for the QR code image.
+</li>
+<li>Use the preview mode for viewing shared list items.
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Testing</strong></p>
+<ul>
+<li>Verify the QR code generation and ensure it encodes the correct URL.
+</li>
+<li>Test scanning the QR code with different devices and QR code readers.
+</li>
+<li>Ensure that scanning the QR code leads to the correct list preview mode.
+</li>
+<li>Test the selection and addition of items from the preview mode to the user's top list and verify that they are persisted in <code>localStorage</code>.
+</li>
+</ul>
+</li>
+</ol>
+</article>
 <article><a class='straw-bookmark' id='show_a_specific_error_notice_when_migration_fails.md' href='#show_a_specific_error_notice_when_migration_fails.md'>🔖 open/show_a_specific_error_notice_when_migration_fails.md</a><h1 id="show-a-specific-error-notice-when-migration-fails">Show a specific error notice when migration fails</h1>
 <p>An error that occurs during a migration might be recoverable. Show a different
 error with the option to ignore once or forever.</p>
