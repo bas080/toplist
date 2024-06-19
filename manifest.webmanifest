@@ -6,7 +6,8 @@
   "start_url": "index.html",
   "display": "standalone",
   "background": {
-    "service_worker": "./service-worker.mjs"
+    "service_worker": "service-worker.mjs",
+    "type": "module"
   },
   "background_color": "#228b22",
   "theme_color": "#af0c1a",

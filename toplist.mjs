@@ -278,6 +278,19 @@ function rerender() {
 
 rerender();
 
+if ("serviceWorker" in navigator) {
+  try {
+    const registration = await navigator.serviceWorker.register(
+      new URL("./service-worker.mjs", import.meta.url),
+      {type: 'module'}
+    );
+
+    console.log("Service Worker registered with scope:", registration.scope);
+  } catch (error) {
+    console.error("Service Worker registration failed:", error);
+  }
+}
+
 tryReject(function () {
   const url = new URL(window.location.href);
   const append = url.searchParams.get("append");
