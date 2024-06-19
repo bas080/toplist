@@ -25,3 +25,12 @@ export const tryReject = (fn) => {
     Promise.reject(error);
   }
 };
+
+export const moveItemToTop = (arr, n) => {
+  if (n < 0 || n >= arr.length) throw new Error("Index out of bounds");
+
+  const item = arr.splice(n, 1)[0]; // Remove the item at index n and get it
+  arr.unshift(item); // Add the item to the beginning of the array
+
+  return arr;
+};
