@@ -275,11 +275,15 @@ function rerender() {
 }
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker
-      .register(new URL("./serviceWorker.js", import.meta.url))
-      .then((res) => console.log("service worker registered"))
-      .catch((err) => console.log("service worker not registered", err));
+  window.addEventListener("load", async function () {
+    try {
+      await navigator.serviceWorker
+        .register(new URL("./serviceWorker.js", import.meta.url))
+
+      console.log("service worker registered")
+    } catch (err) {
+      console.log("service worker not registered", err)
+    }
   });
 }
 

@@ -1,33 +1,32 @@
 const staticTopList = "toplist-v1";
-const assets = [
-  "/",
-  "/index.html",
-  "/toplist/",
-  "/toplist/index.html",
-  // Add more assets as needed
-];
 
-self.addEventListener("install", (installEvent) => {
-  installEvent.waitUntil(
-    caches.open(staticTopList).then((cache) => {
-      cache.addAll(assets);
-    }),
-  );
-});
+const actions = {
+  undefined(event) {
+    console.error(`No action with name "${event.data.action}".`)
+  },
+  clearCache() {
+    caches.keys().then(function(names) {
+      for (let name of names)
+        caches.delete(name);
+    });
+  }
+}
 
-self.addEventListener("fetch", (fetchEvent) => {
-  fetchEvent.respondWith(
-    caches.match(fetchEvent.request).then((res) => {
-      return res || fetch(fetchEvent.request);
-    }),
-  );
+self.addEventListener("fetch", async ({request}) => {
+  try {
+    const cachedResponse = await caches.match(request);
+
+    if (cachedResponse) return cachedResponse;
+
+    return await fetch(request);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
 });
 
 // Listen for messages from clients
 self.addEventListener("message", (event) => {
-  if (event.data && event.data.action === "clearCache") {
-    caches.delete(staticTopList).then(() => {
-      console.log(`${staticTopList} cache cleared`);
-    });
-  }
+  actions[event.data.action](event)
 });
+
