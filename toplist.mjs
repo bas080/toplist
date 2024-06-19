@@ -7,7 +7,6 @@ import {
   findMax,
   head,
   rest,
-  noop,
   tryCatch,
   tryReject,
   moveItemToTop,
@@ -241,7 +240,7 @@ const list =
               <section>
                 <p>Raise archived list to top.</p>
                 <button class="button" @click="${raiseArchived(index + 1)}">
-                  Raise ${index}
+                  Raise
                 </button>
               </section>
 
