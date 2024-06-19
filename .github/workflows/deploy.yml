@@ -26,9 +26,9 @@ jobs:
 
     - name: Generate the straw html page
       run: |
-        curl -L https://github.com/bas080/straw/releases/download/master/ubuntu-latest.exe > ./straw
-        chmod +x ./straw
-        ./straw html > ./dist/straw/index.html
+        curl -L https://github.com/bas080/straw/releases/download/master/ubuntu-latest.exe > ./straw-bin
+        chmod +x ./straw-bin
+        ./straw-bin html > ./dist/straw/index.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
