@@ -166,13 +166,15 @@ const copy = (items) => () => {
   alert("copy");
 };
 
-const clearCache = () => {
+const clearCache = async () => {
   if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({
+    const registration = await navigator.serviceWorker.ready;
+    const serviceWorker = registration.active;
+    serviceWorker.postMessage({
       action: "clearCache",
     });
   }
-  location.reload()
+  setTimeout(() => location.reload(), 200);
 };
 
 const shareUrl = (items) => {
@@ -274,19 +276,6 @@ function rerender() {
   render(app(), window.app);
 }
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async function () {
-    try {
-      await navigator.serviceWorker
-        .register(new URL("./serviceWorker.js", import.meta.url))
-
-      console.log("service worker registered")
-    } catch (err) {
-      console.log("service worker not registered", err)
-    }
-  });
-}
-
 rerender();
 
 tryReject(function () {
@@ -301,14 +290,18 @@ tryReject(function () {
       window.preview,
     );
 
-    const { dialog } = window
+    const { dialog } = window;
 
     dialog.showModal();
 
-    dialog.addEventListener('close', () => {
-      url.searchParams.delete("append");
-      window.history.replaceState(null, document.title, url.toString());
-    }, {once: true})
+    dialog.addEventListener(
+      "close",
+      () => {
+        url.searchParams.delete("append");
+        window.history.replaceState(null, document.title, url.toString());
+      },
+      { once: true },
+    );
 
     function onClick(event) {
       if (event.target === dialog) {
@@ -316,11 +309,14 @@ tryReject(function () {
       }
     }
 
-    dialog.addEventListener("click", event => {
-      if (event.target == dialog) dialog.close()
-    }, {once: true});
+    dialog.addEventListener(
+      "click",
+      (event) => {
+        if (event.target == dialog) dialog.close();
+      },
+      { once: true },
+    );
 
     dialog.showModal();
   }
 });
-

@@ -20,7 +20,7 @@
   },
   "targets": {
     "default": {
-      "source": "./index.html"
+      "source": ["./index.html", "./service-worker.mjs"]
     }
   }
 }
