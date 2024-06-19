@@ -1,5 +1,4 @@
 import { html, render } from "lit-html";
-import { keyed } from "lit-html/directives/keyed.js";
 import emojiMap from "./emoji.json";
 import levenshtein from "js-levenshtein";
 import { version } from "./package.json";
@@ -207,7 +206,7 @@ const share = (items) => (event) => {
 const list =
   (isTopList) =>
   ({ created, items }, index) =>
-    keyed(
+    (
       created,
       html` <article>
         ${isTopList
