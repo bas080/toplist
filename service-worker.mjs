@@ -1,4 +1,5 @@
-const staticTopList = "toplist-v1";
+import { version } from './package.json'
+const staticTopList = `toplist-v${version}`;
 
 const actions = {
   undefined(event) {
