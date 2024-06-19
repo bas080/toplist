@@ -2,7 +2,14 @@ import { html, render } from "lit-html";
 import emojiMap from "./emoji.json";
 import levenshtein from "js-levenshtein";
 import { version } from "./package.json";
-import { memoize, findMax, head, rest, tryReject } from "./util.mjs";
+import {
+  memoize,
+  findMax,
+  head,
+  rest,
+  tryReject,
+  moveItemToTop,
+} from "./util.mjs";
 
 // RENDER ERRORS
 
@@ -65,6 +72,12 @@ const someEmoji = memoize((value) => {
 });
 
 let data;
+
+const raiseArchived = (index) => () => {
+  data.lists = moveItemToTop(data.lists, index);
+  window.toplist.scrollIntoView();
+  rerender();
+};
 
 try {
   if (!localStorage.data) throw new Error("Not in localStorage.data");
@@ -224,6 +237,13 @@ const list =
             `
           : html`
               <section>
+                <p>Raise archived list to top.</p>
+                <button class="button" @click="${raiseArchived(index + 1)}">
+                  Raise ${index}
+                </button>
+              </section>
+
+              <section>
                 <p>Merge into top list.</p>
                 <button class="button" @click="${mergeItems(items)}">
                   🔃 Merge
@@ -278,20 +298,20 @@ function rerender() {
 
 rerender();
 
-if ("serviceWorker" in navigator) {
-  try {
-    const registration = await navigator.serviceWorker.register(
-      new URL("./service-worker.mjs", import.meta.url),
-      {type: 'module'}
-    );
+tryReject(async function () {
+  if ("serviceWorker" in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register(
+        new URL("./service-worker.mjs", import.meta.url),
+        { type: "module" },
+      );
 
-    console.log("Service Worker registered with scope:", registration.scope);
-  } catch (error) {
-    console.error("Service Worker registration failed:", error);
+      console.log("Service Worker registered with scope:", registration.scope);
+    } catch (error) {
+      console.error("Service Worker registration failed:", error);
+    }
   }
-}
 
-tryReject(function () {
   const url = new URL(window.location.href);
   const append = url.searchParams.get("append");
 
