@@ -81,7 +81,7 @@ li.list-item button:hover,
   border-color: var(--text);
 }
 
-#dialog {
+dialog {
   min-width: min(45rem,90%);
 }
 

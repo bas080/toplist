@@ -2,6 +2,7 @@ import { html, render } from "lit-html";
 import emojiMap from "./emoji.json";
 import levenshtein from "js-levenshtein";
 import { version } from "./package.json";
+import QRCode from "qrcode-svg";
 import {
   memoize,
   findMax,
@@ -11,6 +12,21 @@ import {
   tryReject,
   moveItemToTop,
 } from "./util.mjs";
+
+const openQRCode = (items) => () => {
+  const url = shareUrl(items);
+
+  const qrcode = new QRCode({
+    content: url,
+    container: "svg-viewbox", //Responsive use
+    join: true, //Crisp rendering and 4-5x reduced file size
+  });
+
+  const svg = qrcode.svg();
+
+  document.getElementById("qr-code").innerHTML = svg;
+  window.qrCodeDialog.showModal();
+};
 
 // RENDER ERRORS
 
@@ -208,9 +224,7 @@ const list =
   (isTopList) =>
   ({ created, items }, index) =>
     html`<article>
-      ${isTopList
-        ? html`<h1 id="toplist">Top List 🍒</h1>`
-        : html`<h2>${toLocaleString(created)}</h2>`}
+      ${isTopList ? html`<h1 id="toplist">Top List 🍒</h1>` : null}
       ${isTopList
         ? html` <form @submit="${addItem}">
             <label>New Item</label>
@@ -252,6 +266,10 @@ const list =
               </section>
             `}
 
+        <section>
+          <p>Share using QR code.</p>
+          <button @click="${openQRCode(items)}">Generate QR</button>
+        </section>
         <section>
           <p>Creates a link that appends the list items.</p>
           <p>Use it to share your list with someone's toplist.</p>
