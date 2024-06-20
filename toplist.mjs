@@ -7,6 +7,8 @@ import {
   findMax,
   head,
   rest,
+  noop,
+  tryCatch,
   tryReject,
   moveItemToTop,
 } from "./util.mjs";
@@ -192,7 +194,7 @@ const clearCache = async () => {
 
 const shareUrl = (items) => {
   const url = new URL(window.location.pathname, window.location.origin);
-  url.searchParams.append("append", JSON.stringify(items));
+  url.hash = JSON.stringify(items);
 
   return url.toString();
 };
@@ -206,62 +208,60 @@ const share = (items) => (event) => {
 const list =
   (isTopList) =>
   ({ created, items }, index) =>
-    (
-      created,
-      html` <article>
+    html`<article>
+      ${isTopList
+        ? html`<h1 id="toplist">Top List 🍒</h1>`
+        : html`<h2>${toLocaleString(created)}</h2>`}
+      ${isTopList
+        ? html` <form @submit="${addItem}">
+            <label>New Item</label>
+            <input required id="addItemInput" />
+            <input type="submit" value="Add item" />
+          </form>`
+        : null}
+      <ul class="list ${isTopList && "list-top"}">
+        ${items.length
+          ? listItems(isTopList)(items)
+          : html`<em>
+              New empty list. Start adding items. Click an item to remove
+              it.</em
+            >`}
+      </ul>
+      <details>
+        <summary>List</summary>
+
         ${isTopList
-          ? html`<h1 id="toplist">Top List 🍒</h1>`
-          : html`<h2>${toLocaleString(created)}</h2>`}
-        ${isTopList
-          ? html` <form @submit="${addItem}">
-              <label>New Item</label>
-              <input required id="addItemInput" />
-              <input type="submit" value="Add item" />
-            </form>`
-          : null}
-        <ul class="list ${isTopList && "list-top"}">
-          ${items.length
-            ? listItems(isTopList)(items)
-            : html`<em>
-                New empty list. Start adding items. Click an item to remove
-                it.</em
-              >`}
-        </ul>
-        <details>
-          <summary>List</summary>
+          ? html`
+              <section>
+                <p>Archive top list and create new one.</p>
+                <button @click="${createList}">Archive</button>
+              </section>
+            `
+          : html`
+              <section>
+                <p>Raise archived list to top.</p>
+                <button class="button" @click="${raiseArchived(index + 1)}">
+                  Raise ${index}
+                </button>
+              </section>
 
-          ${isTopList
-            ? html`
-                <section>
-                  <p>Archive top list and create new one.</p>
-                  <button @click="${createList}">Archive</button>
-                </section>
-              `
-            : html`
-                <section>
-                  <p>Raise archived list to top.</p>
-                  <button class="button" @click="${raiseArchived(index + 1)}">
-                    Raise ${index}
-                  </button>
-                </section>
+              <section>
+                <p>Merge into top list.</p>
+                <button class="button" @click="${mergeItems(items)}">
+                  🔃 Merge
+                </button>
+              </section>
+            `}
 
-                <section>
-                  <p>Merge into top list.</p>
-                  <button class="button" @click="${mergeItems(items)}">
-                    🔃 Merge
-                  </button>
-                </section>
-              `}
+        <section>
+          <p>Creates a link that appends the list items.</p>
+          <p>Use it to share your list with someone's toplist.</p>
+          <a class="button" href="${shareUrl(items)}" @click="${share(items)}"
+            >Share</a
+          >
+        </section>
 
-          <section>
-            <p>Creates a link that appends the list items.</p>
-            <p>Use it to share your list with someone's toplist.</p>
-            <a class="button" href="${shareUrl(items)}" @click="${share(items)}"
-              >Share</a
-            >
-          </section>
-
-          <!--
+        <!--
             <section>
               <p>Copy the complete list. Each item is on a newline.</p>
               <button @click="${copy(items)}">Text</button>
@@ -272,9 +272,8 @@ const list =
               <button @click="${download(items)}">Download</button>
             </section>
             -->
-        </details>
-      </article>`,
-    );
+      </details>
+    </article>`;
 
 const isNotEmpty = (x) => (x ? x.length !== 0 : true);
 
@@ -318,9 +317,18 @@ tryReject(async function () {
   const url = new URL(window.location.href);
   const append = url.searchParams.get("append");
 
-  if (append) {
-    const items = JSON.parse(append);
+  const items = tryCatch(
+    () => {
+      return append
+        ? JSON.parse(append)
+        : JSON.parse(decodeURIComponent(window.location.hash).substring(1));
+    },
+    (error) => {
+      console.error(error);
+    },
+  );
 
+  if (items) {
     render(
       list(false)({ created: new Date().toISOString(), items }, 0),
       window.preview,
@@ -334,6 +342,7 @@ tryReject(async function () {
       "close",
       () => {
         url.searchParams.delete("append");
+        url.hash = "";
         window.history.replaceState(null, document.title, url.toString());
       },
       { once: true },

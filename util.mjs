@@ -34,3 +34,11 @@ export const moveItemToTop = (arr, n) => {
 
   return arr;
 };
+
+export const tryCatch = (doFn, catchFn) => {
+  try {
+    return doFn();
+  } catch (error) {
+    return catchFn(error);
+  }
+};
