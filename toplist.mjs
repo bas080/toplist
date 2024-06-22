@@ -114,11 +114,6 @@ const newList = () => ({
 
 data.lists[0] = data.lists[0] ?? newList();
 
-const toLocaleString = (value) => {
-  if (typeof value === "string") return toLocaleString(new Date(value));
-  return value.toLocaleString();
-};
-
 const mergeItems = (items) => () => {
   window.dialog.close();
   data.lists[0].items.push(...items);
