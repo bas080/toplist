@@ -15,49 +15,63 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
   </li>`,ec=e=>i=>i.map(ea(e)),er=i=>{if(i.preventDefault(),0===e.lists[0].items.length){window.toplist.scrollIntoView(),window.addItemInput.focus();return}e.lists.unshift(eo()),window.toplist.scrollIntoView(),ef()},eu=i=>{i.preventDefault();let o=i.target.querySelector("input");e.lists[0].items.unshift(o.value),o.value="",ef()},ed=async e=>{if(navigator.clipboard&&navigator.clipboard.writeText)try{await navigator.clipboard.writeText(e),console.log("Text successfully copied to clipboard")}catch(i){console.error("Failed to copy text using Clipboard API: ",i),eD(e)}else console.warn("Clipboard API not supported. Falling back to prompt."),eD(e)},eD=e=>{try{prompt("Copy the text below:",e),console.log("Text successfully copied to clipboard via prompt")}catch(e){console.error("Failed to copy text via prompt: ",e)}},el=e=>()=>{alert("download")},ep=e=>()=>{alert("copy")},eg=async()=>{"serviceWorker"in navigator&&navigator.serviceWorker.controller&&(await navigator.serviceWorker.ready).active.postMessage({action:"clearCache"}),setTimeout(()=>location.reload(),200)},em=e=>{let i=new URL(window.location.pathname,window.location.origin);return i.hash=JSON.stringify(e),i.toString()},eh=e=>i=>{i.preventDefault(),ed(em(e))},e_=e=>({created:i,items:o},t)=>x`<article>
       ${e?x`<h1 id="toplist">Top List 🍒</h1>`:x`<h2>${et(i)}</h2>`}
       ${e?x` <form @submit="${eu}">
-            <label>New Item</label>
-            <input required id="addItemInput" />
-            <input type="submit" value="Add item" />
-          </form>`:null}
+              <label>New Item</label>
+              <input required id="addItemInput" />
+              <input type="submit" value="Add item" />
+            </form>`:null}
       <ul class="list ${e&&"list-top"}">
         ${o.length?ec(e)(o):x`<em>
-              New empty list. Start adding items. Click an item to remove
-              it.</em
-            >`}
+                New empty list. Start adding items. Click an item to remove
+                it.</em
+              >`}
       </ul>
       <details>
         <summary>List</summary>
 
-        ${e?x`
-              <section>
-                <p>Archive top list and create new one.</p>
-                <button @click="${er}">Archive</button>
-              </section>
-            `:x`
-              <section>
-                <p>Raise archived list to top.</p>
-                <button class="button" @click="${ei(t+1)}">
-                  Raise ${t}
-                </button>
-              </section>
+        ${e?x` <form @submit="${eu}">
+                <label>New Item</label>
+                <input required id="addItemInput" />
+                <input type="submit" value="Add item" />
+              </form>`:null}
+        <ul class="list ${e&&"list-top"}">
+          ${o.length?ec(e)(o):x`<em>
+                  New empty list. Start adding items. Click an item to remove
+                  it.</em
+                >`}
+        </ul>
+        <details>
+          <summary>List</summary>
 
-              <section>
-                <p>Merge into top list.</p>
-                <button class="button" @click="${en(o)}">
-                  🔃 Merge
-                </button>
-              </section>
-            `}
+          ${e?x`
+                  <section>
+                    <p>Archive top list and create new one.</p>
+                    <button @click="${er}">Archive</button>
+                  </section>
+                `:x`
+                  <section>
+                    <p>Raise archived list to top.</p>
+                    <button class="button" @click="${ei(t+1)}">
+                      Raise ${t}
+                    </button>
+                  </section>
 
-        <section>
-          <p>Creates a link that appends the list items.</p>
-          <p>Use it to share your list with someone's toplist.</p>
-          <a class="button" href="${em(o)}" @click="${eh(o)}"
-            >Share</a
-          >
-        </section>
+                  <section>
+                    <p>Merge into top list.</p>
+                    <button class="button" @click="${en(o)}">
+                      🔃 Merge
+                    </button>
+                  </section>
+                `}
 
-        <!--
+          <section>
+            <p>Creates a link that appends the list items.</p>
+            <p>Use it to share your list with someone's toplist.</p>
+            <a class="button" href="${em(o)}" @click="${eh(o)}"
+              >Share</a
+            >
+          </section>
+
+          <!--
             <section>
               <p>Copy the complete list. Each item is on a newline.</p>
               <button @click="${ep(o)}">Text</button>
@@ -68,8 +82,8 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
               <button @click="${el(o)}">Download</button>
             </section>
             -->
-      </details>
-    </article>`,ej=e=>!e||0!==e.length,eb=e=>i=>i.filter(({items:i})=>e||ej(i)).map(e_(e)),ew=()=>x` <details>
+        </details>
+      </article>`,ej=e=>!e||0!==e.length,eb=e=>i=>i.filter(({items:i})=>e||ej(i)).map(e_(e)),ew=()=>x` <details>
       <summary>Settings</summary>
       <button>Export</button>
       <button>Import</button>
@@ -77,4 +91,4 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
       <p class="subtle">Top List v${Y.version}</p>
     </details>
     ${eb(!0)((0,Z.head)(e.lists))} ${eb(!1)((0,Z.rest)(e.lists))}`;function ef(){localStorage.data=JSON.stringify(e),J(ew(),window.app)}ef();var eC={};eC=new URL("service-worker.js",import.meta.url).toString(),(0,Z.tryReject)(async function(){if("serviceWorker"in navigator)try{let e=await navigator.serviceWorker.register(eC);console.log("Service Worker registered with scope:",e.scope)}catch(e){console.error("Service Worker registration failed:",e)}let e=new URL(window.location.href),i=e.searchParams.get("append"),o=(0,Z.tryCatch)(()=>i?JSON.parse(i):JSON.parse(decodeURIComponent(window.location.hash).substring(1)),e=>{console.error(e)});if(o){J(e_(!1)({created:new Date().toISOString(),items:o},0),window.preview);let{dialog:i}=window;i.showModal(),i.addEventListener("close",()=>{e.searchParams.delete("append"),e.hash="",window.history.replaceState(null,document.title,e.toString())},{once:!0}),i.addEventListener("click",e=>{e.target==i&&i.close()},{once:!0}),i.showModal()}});
-//# sourceMappingURL=index.6691bbdc.js.map
+//# sourceMappingURL=index.d025d13f.js.map
