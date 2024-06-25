@@ -1,4 +1,6 @@
 import { html, render } from "lit-html";
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
+import linkify from "linkify-string";
 import emojiMap from "./emoji.json";
 import levenshtein from "js-levenshtein";
 import { version } from "./package.json";
@@ -132,7 +134,14 @@ const onListItemClick = (value, isTopList, index) => (event) => {
 const listItem = (isTopList) => (value, index) =>
   html` <li class="list-item">
     <form @submit=${onListItemClick(value, isTopList, index)}>
-      <button>${value} ${someEmoji(value)}</button>
+      <button>
+        ${unsafeHTML(
+          linkify(value, {
+            target: "_blank",
+          }),
+        )}
+        ${someEmoji(value)}
+      </button>
     </form>
   </li>`;
 
