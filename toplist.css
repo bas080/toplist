@@ -11,7 +11,7 @@ body *::backdrop {
   --text-light: #585858; /* #585858 */
   --border: #8a8a8a; /* #898ea4 */
   --accent: #4b4b4b; /* #0d47a1 */
-  --accent-hover: #686868; /* #1266e2 */
+  --accent-hover: var(--text); /* #1266e2 */
   --accent-text: var(--bg);
   --code: #696969; /* #d81b60 */
   --preformatted: #444444; /* #444 */
@@ -28,7 +28,7 @@ body *::backdrop {
     --text: #dcdcdc; /* #dcdcdc */
     --text-light: #ababab; /* #ababab */
     --accent: #b5b5b5; /* #ffb300 */
-    --accent-hover: #d8d8d8; /* #ffe099 */
+    --accent-hover: var(--text); /* #ffe099 */
     --accent-text: var(--bg);
     --code: #cccccc; /* #f06292 */
     --preformatted: #cccccc; /* #ccc */
@@ -57,6 +57,14 @@ ul {
   text-align: center;
   background-color: var(--bg);
   color: var(--text);
+}
+
+.action:hover {
+  color: var(--bg);
+}
+
+.action:hover svg {
+  fill: var(--bg);
 }
 
 .action svg {
