@@ -53,31 +53,15 @@ ul {
   padding: unset;
 }
 
-ul .list-item button:before {
-  display: inline-block;
-  font-weight: bold;
-  margin-right: 1ch;
-  content: " + ";
-}
-
-ul.list-top .list-item button:before {
-  content: " - ";
-}
-
-.list-item button,
-.list-item button:hover,
-.list-item button:focus {
+.action {
+  width: 2em;
+  text-align: center;
   background-color: var(--bg);
-  border-color: var(--border);
-  color: var(--text);
-  display: block;
-  width: 100%;
-  text-align: left;
 }
 
-li.list-item button:hover,
-.list-item button:focus {
-  border-color: var(--text);
+.action svg {
+  fill: var(--text);
+  height: 1em;
 }
 
 dialog {
@@ -94,4 +78,28 @@ dialog {
 
 body:has(dialog[open]) {
   overflow: hidden;
+}
+
+.list {
+  margin-bottom: 4rem;
+  padding: 0 1rem;
+}
+
+.list-item details {
+  margin-bottom: 0px;
+}
+
+.list-item details:not(:hover) {
+  background: none;
+  border-color: #00000000;
+}
+
+.list-item details > summary {
+  list-style: none;
+  font-weight: normal;
+}
+
+.list-item details > summary::marker, /* Latest Chrome, Edge, Firefox */
+.list-item details > summary::-webkit-details-marker /* Safari */ {
+  display: none;
 }

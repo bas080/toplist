@@ -1,12 +1,10 @@
 import { html, render } from "lit-html";
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import linkify from "linkify-string";
-import emojiMap from "./emoji.json";
-import levenshtein from "js-levenshtein";
 import { version } from "./package.json";
 import QRCode from "qrcode-svg";
 import {
   memoize,
+  isNotEmpty,
   findMax,
   head,
   rest,
@@ -14,8 +12,9 @@ import {
   tryReject,
   moveItemToTop,
 } from "./util.mjs";
+import { toplist } from "./lit-component.mjs";
 
-const openQRCode = (items) => () => {
+const openQRCode = (items) => {
   const url = shareUrl(items);
 
   const qrcode = new QRCode({
@@ -74,25 +73,9 @@ window.addEventListener(
   }
 })();
 
-const emojiByTag = emojiMap.names.reduce((acc, name) => {
-  name.tags.split(":").forEach((tag) => {
-    acc.push([tag, name]);
-  });
-
-  return acc;
-}, []);
-
-const someEmoji = memoize((value) => {
-  if (!value) return null;
-
-  return findMax(([tag]) => {
-    return -levenshtein(tag, value);
-  }, emojiByTag)[1].unicode;
-});
-
 let data;
 
-const raiseArchived = (index) => () => {
+const raiseArchived = (index) => {
   data.lists = moveItemToTop(data.lists, index);
   window.toplist.scrollIntoView();
   rerender();
@@ -122,33 +105,20 @@ const mergeItems = (items) => () => {
   rerender();
 };
 
-const onListItemClick = (value, isTopList, index) => (event) => {
-  event.preventDefault();
+const onListItemClick = ({
+  target,
+  detail: { itemIndex: index, isTopList },
+}) => {
   // Should remove when in the top list.
   if (isTopList) data.lists[0].items.splice(index, 1);
-  else data.lists[0].items.unshift(value);
+  else data.lists[0].items.unshift(target.value);
 
   rerender();
 };
 
-const listItem = (isTopList) => (value, index) =>
-  html` <li class="list-item">
-    <form @submit=${onListItemClick(value, isTopList, index)}>
-      <button>
-        ${unsafeHTML(
-          linkify(value, {
-            target: "_blank",
-          }),
-        )}
-        ${someEmoji(value)}
-      </button>
-    </form>
-  </li>`;
-
 const listItems = (isTopList) => (items) => items.map(listItem(isTopList));
 
 const createList = (event) => {
-  event.preventDefault();
   if (data.lists[0].items.length === 0) {
     window.toplist.scrollIntoView();
     window.addItemInput.focus();
@@ -218,105 +188,35 @@ const shareUrl = (items) => {
   return url.toString();
 };
 
-const share = (items) => (event) => {
-  event.preventDefault();
-
-  clipboard(shareUrl(items));
+const share = (event) => {
+  clipboard(shareUrl(event.detail.items));
 };
-
-const list =
-  (isTopList) =>
-  ({ created, items }, index) =>
-    html`<article>
-      ${isTopList ? html`<h1 id="toplist">Top List 🍒</h1>` : null}
-      ${isTopList
-        ? html` <form @submit="${addItem}">
-            <label>New Item</label>
-            <input required id="addItemInput" />
-            <input type="submit" value="Add item" />
-          </form>`
-        : null}
-      <ul class="list ${isTopList && "list-top"}">
-        ${items.length
-          ? listItems(isTopList)(items)
-          : html`<em>
-              New empty list. Start adding items. Click an item to remove
-              it.</em
-            >`}
-      </ul>
-      <details>
-        <summary>List</summary>
-
-        ${isTopList
-          ? html`
-              <section>
-                <p>Archive top list and create new one.</p>
-                <button @click="${createList}">Archive</button>
-              </section>
-            `
-          : html`
-              <section>
-                <p>Raise archived list to top.</p>
-                <button class="button" @click="${raiseArchived(index + 1)}">
-                  Raise
-                </button>
-              </section>
-
-              <section>
-                <p>Merge into top list.</p>
-                <button class="button" @click="${mergeItems(items)}">
-                  🔃 Merge
-                </button>
-              </section>
-            `}
-
-        <section>
-          <p>Share using QR code.</p>
-          <button @click="${openQRCode(items)}">Generate QR</button>
-        </section>
-        <section>
-          <p>Creates a link that appends the list items.</p>
-          <p>Use it to share your list with someone's toplist.</p>
-          <a class="button" href="${shareUrl(items)}" @click="${share(items)}"
-            >Share</a
-          >
-        </section>
-
-        <!--
-            <section>
-              <p>Copy the complete list. Each item is on a newline.</p>
-              <button @click="${copy(items)}">Text</button>
-            </section>
-
-            <section>
-              <p>Download as a text file. Each item is on a newline.</p>
-              <button @click="${download(items)}">Download</button>
-            </section>
-            -->
-      </details>
-    </article>`;
-
-const isNotEmpty = (x) => (x ? x.length !== 0 : true);
 
 const lists = (isTopList) => (lists) =>
   lists
     .filter(({ items }) => isTopList || isNotEmpty(items))
     .map(list(isTopList));
 
-const app = () =>
-  html` <details>
-      <summary>Settings</summary>
-      <button>Export</button>
-      <button>Import</button>
-      <button @click="${clearCache}">Update App</button>
-      <p class="subtle">Top List v${version}</p>
-    </details>
-    ${lists(true)(head(data.lists))} ${lists(false)(rest(data.lists))}`;
+const actions = {
+  addItem,
+  addAction(event) {
+    data.lists[0].items.unshift(event.detail.item);
+    rerender();
+  },
+  removeAction: (event) => onListItemClick(event),
+  shareListAction: share,
+  newListAction: createList,
+  updateAppAction: clearCache,
+  raiseAction: (event) => {
+    raiseArchived(event.detail.listIndex);
+  },
+  qrShareListAction: (event) => openQRCode(event.detail.items),
+};
 
 function rerender() {
   localStorage.data = JSON.stringify(data);
 
-  render(app(), window.app);
+  render(toplist.app(data, actions), window.app);
 }
 
 rerender();

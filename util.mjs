@@ -42,3 +42,7 @@ export const tryCatch = (doFn, catchFn) => {
     return catchFn(error);
   }
 };
+
+export const identity = (x) => x;
+
+export const isNotEmpty = (x) => (x ? x.length !== 0 : true);
