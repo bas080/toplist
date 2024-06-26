@@ -1,1 +1,1 @@
-{"manifest_version":3,"name":"TopList","version":"0.0.0","short_name":"TopList","start_url":"index.html","display":"standalone","background":{"service_worker":"service-worker.mjs","type":"module"},"background_color":"#228b22","theme_color":"#af0c1a","orientation":"portrait-primary"}
+{"manifest_version":3,"name":"TopList","version":"0.0.0","short_name":"TopList","start_url":"index.html","display":"standalone","background":{"service_worker":"service-worker.mjs","type":"module"},"background_color":"#121212","theme_color":"#121212","orientation":"portrait-primary"}
