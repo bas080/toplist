@@ -1,4 +1,4 @@
-# Top List
+# Top List 🍒
 
 No databases, just localStorage and URLs.
 
