@@ -211,6 +211,12 @@ const actions = {
     raiseArchived(event.detail.listIndex);
   },
   qrShareListAction: (event) => openQRCode(event.detail.items),
+  clearListsAction() {
+    if (confirm("Are you sure you want to delete all lists?")) {
+      localStorage.clear();
+      location.reload();
+    }
+  },
 };
 
 function rerender() {

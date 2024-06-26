@@ -54,14 +54,15 @@ ul {
 }
 
 .action {
-  width: 2em;
   text-align: center;
   background-color: var(--bg);
+  color: var(--text);
 }
 
 .action svg {
   fill: var(--text);
-  height: 1em;
+  height: 1lh;
+  vertical-align: middle;
 }
 
 dialog {
