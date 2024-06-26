@@ -9,7 +9,7 @@
     "service_worker": "service-worker.mjs",
     "type": "module"
   },
-  "background_color": "#228b22",
-  "theme_color": "#af0c1a",
+  "background_color": "#121212",
+  "theme_color": "#121212",
   "orientation": "portrait-primary"
 }
