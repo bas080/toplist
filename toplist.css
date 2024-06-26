@@ -80,11 +80,6 @@ body:has(dialog[open]) {
   overflow: hidden;
 }
 
-.list {
-  margin-bottom: 4rem;
-  padding: 0 1rem;
-}
-
 .list-item details {
   margin-bottom: 0px;
 }
