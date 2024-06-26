@@ -1,4 +1,4 @@
-import { isNil } from './util.mjs'
+import { isNil } from "./util.mjs";
 
 class MissingMigration extends Error {}
 
@@ -9,11 +9,13 @@ export async function migrate(migrations, current, target) {
     return;
   }
 
-  const migration = migrations[current]
+  const migration = migrations[current];
 
   if (isNil(migration)) {
-    throw new MissingMigration(`No migration defined for ${current}. Migrating to ${target} failed.`)
+    throw new MissingMigration(
+      `No migration defined for ${current}. Migrating to ${target} failed.`,
+    );
   }
 
-  return migrate(migrations, await migration(target), target)
+  return migrate(migrations, await migration(target), target);
 }

@@ -3,41 +3,41 @@ name: Build and Deploy TopList
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the code
-      uses: actions/checkout@v4
+      - name: Check out the code
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        check-latest: true
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          check-latest: true
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Check formatting
-      run: npm run fmt-check
+      - name: Check formatting
+        run: npm run fmt-check
 
-    - name: Build the project
-      run: npm run build
+      - name: Build the project
+        run: npm run build
 
-    - name: Generate the straw html page
-      run: |
-        curl -L https://github.com/bas080/straw/releases/download/master/ubuntu-latest.exe > ./straw-bin
-        chmod +x ./straw-bin
-        mkdir ./dist/straw
-        ./straw-bin html > ./dist/straw/index.html
+      - name: Generate the straw html page
+        run: |
+          curl -L https://github.com/bas080/straw/releases/download/master/ubuntu-latest.exe > ./straw-bin
+          chmod +x ./straw-bin
+          mkdir ./dist/straw
+          ./straw-bin html > ./dist/straw/index.html
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
     permissions:
-      contents: write  # Apply permissions only to the deployment job
+      contents: write # Apply permissions only to the deployment job
