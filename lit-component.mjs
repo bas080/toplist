@@ -215,41 +215,39 @@ const toplist = {
 
   items: (vm) => vm.items.map(toplist.item(vm)),
 
-  list:
-    (vm) =>
-    (list, listIndex = 0) => {
-      vm = {
-        ...vm,
-        ...list,
-        isTopList: vm.isTopList ?? listIndex === 0,
-        listIndex,
-      };
+  list: (vm) => (list, listIndex) => {
+    vm = {
+      ...vm,
+      ...list,
+      isTopList: isNil(listIndex) ? vm.isTopList : listIndex === 0,
+      listIndex,
+    };
 
-      return html`<article class="list">
-        ${when(
-          vm.isTopList,
-          () =>
-            html` <h1 id="toplist">${tr("appTitle")}</h1>
-              <form @submit="${emitAction("addItem", vm)}">
-                <label>${tr("newItem")}</label>
-                <input required id="addItemInput" />
-                <input type="submit" value="${tr("addItem")}" />
-              </form>`,
-        )}
+    return html`<article class="list">
+      ${when(
+        vm.isTopList,
+        () =>
+          html` <h1 id="toplist">${tr("appTitle")}</h1>
+            <form @submit="${emitAction("addItem", vm)}">
+              <label>${tr("newItem")}</label>
+              <input required id="addItemInput" />
+              <input type="submit" value="${tr("addItem")}" />
+            </form>`,
+      )}
 
-        <ul>
-          ${toplist.items(vm)}
-        </ul>
-        <details>
-          <summary>${tr("listActions")}</summary>
+      <ul>
+        ${toplist.items(vm)}
+      </ul>
+      <details>
+        <summary>${tr("listActions")}</summary>
 
-          ${when(vm.isTopList, () => toplist.action(vm, "newList", svg.plus))}
-          ${when(!vm.isTopList, () => toplist.action(vm, "raise", svg.up))}
-          ${toplist.action(vm, "shareList", svg.share)}
-          ${toplist.action(vm, "qrShareList", svg.qr)}
-        </details>
-      </article> `;
-    },
+        ${when(vm.isTopList, () => toplist.action(vm, "newList", svg.plus))}
+        ${when(!vm.isTopList, () => toplist.action(vm, "raise", svg.up))}
+        ${toplist.action(vm, "shareList", svg.share)}
+        ${toplist.action(vm, "qrShareList", svg.qr)}
+      </details>
+    </article> `;
+  },
 
   lists: (vm) => vm.lists.map(toplist.list(vm)),
 };
