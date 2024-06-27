@@ -108,3 +108,8 @@ body:has(dialog[open]) {
 .list-item details > summary::-webkit-details-marker /* Safari */ {
   display: none;
 }
+
+#qr-code svg path {
+  fill: var(--border) !important;
+  stroke: var(--border) !important;
+}
