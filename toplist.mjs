@@ -12,7 +12,7 @@ import {
   tryReject,
   moveItemToTop,
 } from "./util.mjs";
-import { toplist } from "./lit-component.mjs";
+import { toplist, onAction } from "./lit-component.mjs";
 
 const openQRCode = (items) => {
   const url = shareUrl(items);
@@ -257,7 +257,9 @@ tryReject(async function () {
 
   if (items) {
     render(
-      list(false)({ created: new Date().toISOString(), items }, 0),
+      html`<div @action="${onAction(actions)}">
+        ${toplist.list({ isTopList: false })({ items })}
+      </div>`,
       window.preview,
     );
 
