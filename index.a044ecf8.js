@@ -107,10 +107,12 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
       <details>
         <summary>${iz("listActions")}</summary>
 
-        ${s=e.isTopList,r=()=>iV.action(e,"newList",iM.plus),s?r(s):void 0}
-        ${a=!e.isTopList,c=()=>[iV.action(e,"merge",iM.merge),iV.action(e,"raise",iM.up)],a?c(a):void 0}
-        ${iV.anchor(e,"shareList",iM.share)}
-        ${iV.anchor(e,"qrShareList",iM.qr)}
+        <div class="actions">
+          ${s=e.isTopList,r=()=>iV.action(e,"newList",iM.plus),s?r(s):void 0}
+          ${a=!e.isTopList,c=()=>[iV.action(e,"merge",iM.merge),iV.action(e,"raise",iM.up)],a?c(a):void 0}
+          ${iV.anchor(e,"shareList",iM.share)}
+          ${iV.anchor(e,"qrShareList",iM.qr)}
+        </div>
       </details>
     </article> `},lists:e=>e.lists.map(iV.list(e))},iG=Symbol("rendered");function iQ(e){W(x`
       <p class="notice notice--assertive">
@@ -120,4 +122,4 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
     `,window.error)}window.addEventListener("unhandledrejection",function(e){iQ(e),console.error(e)}),window.addEventListener("error",e=>{if(!e[iG])throw e[iG]=!0,iQ(e),e},!0),async function(){if(window.localStorage.version!==im.version){let{migrate:e}=await r("fhlbu"),{migrations:i}=await r("6xxtQ");await e(i(),window.localStorage.version,im.version)}}();const iY=i=>{e.lists=(0,iL.moveItemToTop)(e.lists,i),window.toplist.scrollIntoView(),i0()};try{if(!localStorage.data)throw Error("Not in localStorage.data");e=JSON.parse(localStorage.data)}catch(i){localStorage.removeItem("data"),e={lists:[]}}const iJ=()=>({created:new Date().toISOString(),items:[]});e.lists[0]=e.lists[0]??iJ();const iX=i=>()=>{window.dialog?.close(),e.lists[0].items.push(...i),i0()},iZ=({target:i,detail:{itemIndex:o,isTopList:t}})=>{t?e.lists[0].items.splice(o,1):e.lists[0].items.unshift(i.value),i0()},i1=async e=>{if(navigator.clipboard&&navigator.clipboard.writeText)try{await navigator.clipboard.writeText(e),console.log("Text successfully copied to clipboard")}catch(i){console.error("Failed to copy text using Clipboard API: ",i),i3(e)}else console.warn("Clipboard API not supported. Falling back to prompt."),i3(e)},i3=e=>{try{prompt("Copy the text below:",e),console.log("Text successfully copied to clipboard via prompt")}catch(e){console.error("Failed to copy text via prompt: ",e)}},i2=async()=>{"serviceWorker"in navigator&&navigator.serviceWorker.controller&&(await navigator.serviceWorker.ready).active.postMessage({action:"clearCache"}),setTimeout(()=>location.reload(),200)},i8={addItem:i=>{i.preventDefault();let o=i.target.querySelector("input");e.lists[0].items.unshift(o.value),o.value="",i0()},mergeAction:e=>iX(e.detail.items),addAction(i){e.lists[0].items.unshift(i.detail.item),i0()},removeAction:e=>iZ(e),shareListAction:e=>{i1(e.target.href)},newListAction:i=>{if(0===e.lists[0].items.length){window.toplist.scrollIntoView(),window.addItemInput.focus();return}e.lists.unshift(iJ()),window.toplist.scrollIntoView(),i0()},updateAppAction:i2,raiseAction:e=>{iY(e.detail.listIndex)},qrShareListAction:e=>{let i=e.target.href,t=new(o(ih))({content:i,container:"svg-viewbox",join:!0}).svg();document.getElementById("qr-code").innerHTML=t,window.qrCodeDialog.showModal()},clearListsAction(){confirm("Are you sure you want to delete all lists?")&&(localStorage.clear(),location.reload())}};function i0(){e.lists=e.lists.filter((e,i)=>0===i||(0,iL.isNotEmpty)(e.items)),localStorage.data=JSON.stringify(e),W(iV.app(e,i8),window.app)}i0();var i4={};i4=new URL("service-worker.js",import.meta.url).toString(),(0,iL.tryReject)(async function(){if("serviceWorker"in navigator)try{let e=await navigator.serviceWorker.register(i4);console.log("Service Worker registered with scope:",e.scope)}catch(e){console.error("Service Worker registration failed:",e)}let e=new URL(window.location.href),i=e.searchParams.get("append"),o=(0,iL.tryCatch)(()=>i?JSON.parse(i):JSON.parse(decodeURIComponent(window.location.hash).substring(1)),e=>{console.error(e)});if(o){W(x`<div @action="${iW(i8)}">
         ${iV.list({isTopList:!1})({items:o})}
       </div>`,window.preview);let{dialog:i}=window;i.showModal(),i.addEventListener("close",()=>{e.searchParams.delete("append"),e.hash="",window.history.replaceState(null,document.title,e.toString())},{once:!0}),i.addEventListener("click",e=>{e.target==i&&i.close()},{once:!0}),i.showModal()}});
-//# sourceMappingURL=index.2128a5bf.js.map
+//# sourceMappingURL=index.a044ecf8.js.map
