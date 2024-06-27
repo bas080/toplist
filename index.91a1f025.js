@@ -67,51 +67,57 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
     <path
       d="M280 64h40c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128C0 92.7 28.7 64 64 64h40 9.6C121 27.5 153.3 0 192 0s71 27.5 78.4 64H280zM64 112c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320c8.8 0 16-7.2 16-16V128c0-8.8-7.2-16-16-16H304v24c0 13.3-10.7 24-24 24H192 104c-13.3 0-24-10.7-24-24V112H64zm128-8a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"
     />
-  </svg>`},iR={appTitle:"Top List \uD83C\uDF52",newItem:"New Item",addItem:"Add Item",listActions:"List",Settings:"Settings",updateApp:"Update",clearLists:"Clear",remove:"Remove",newList:"New List",shareList:"Share",qrShareList:"QR Share",add:"Add",raise:"Swap"},iI=o(iB).names.reduce((e,i)=>(i.tags.split(":").forEach(o=>{e.push([o,i])}),e),[]),iP=(0,iL.memoize)(e=>e?(0,iL.findMax)(([i])=>-o(i$)(i,e),iI)[1].unicode:null),iO=(e,i)=>(0,iL.isNil)(e)?i():e,iq=e=>iO(iR[e],()=>{throw Error(`Translation for "${e}" does not exist`)}),iz=Symbol("name"),iU=(e,i={})=>o=>{o.preventDefault(),o.stopPropagation();let t=new CustomEvent("action",{bubbles:!0,detail:i});t[iz]=e,o.target.dispatchEvent(t)},iK=e=>function(i){this.querySelectorAll("details").forEach(e=>{e.open=!1});let o=i[iz];if((0,iL.isNil)(e[o]))throw Error(`No handler defined for event "${o}".`);e[o](i)},iW={app:(e,i)=>x`
-    <div @action=${iK(i)}>
+  </svg>`},iR=e=>{let i=new URL(window.location.pathname,window.location.origin);return i.hash=JSON.stringify(e),i.toString()},iI={appTitle:"Top List \uD83C\uDF52",newItem:"New Item",addItem:"Add Item",listActions:"List",Settings:"Settings",updateApp:"Update",clearLists:"Clear",remove:"Remove",newList:"New List",shareList:"Share",qrShareList:"QR Share",add:"Add",raise:"Swap"},iP=o(iB).names.reduce((e,i)=>(i.tags.split(":").forEach(o=>{e.push([o,i])}),e),[]),iO=(0,iL.memoize)(e=>e?(0,iL.findMax)(([i])=>-o(i$)(i,e),iP)[1].unicode:null),iq=(e,i)=>(0,iL.isNil)(e)?i():e,iz=e=>iq(iI[e],()=>{throw Error(`Translation for "${e}" does not exist`)}),iU=Symbol("name"),iK=(e,i={})=>o=>{o.preventDefault(),o.stopPropagation();let t=new CustomEvent("action",{bubbles:!0,detail:i});t[iU]=e,o.target.dispatchEvent(t)},iW=e=>function(i){this.querySelectorAll("details").forEach(e=>{e.open=!1});let o=i[iU];if((0,iL.isNil)(e[o]))throw Error(`No handler defined for event "${o}".`);e[o](i)},iV={app:(e,i)=>x`
+    <div @action=${iW(i)}>
       <details>
-        <summary>${iq("Settings")}</summary>
+        <summary>${iz("Settings")}</summary>
 
-        ${iW.action(e,"updateApp",iM.refresh)}
-        ${iW.action(e,"clearLists",iM.flame)}
+        ${iV.action(e,"updateApp",iM.refresh)}
+        ${iV.action(e,"clearLists",iM.flame)}
       </details>
-      ${iW.lists(e)}
+      ${iV.lists(e)}
     </div>
-  `,action:(e,i,o=null)=>x`<button class="action" @click=${iU(`${i}Action`,e)}>
-      ${o} ${iq(i)}
-    </button>`,actionsCommon:e=>null,actionsToplist:e=>iW.action(e,"remove",iM.minus),actionsNotToplist:e=>iW.action(e,"add",iM.plus),actions:e=>[iW.actionsCommon(e),e.isTopList?iW.actionsToplist(e):iW.actionsNotToplist(e)],item:e=>(i,o)=>(e={...e,itemIndex:o,item:i},x`<li class="list-item">
+  `,action:(e,i,o=null)=>x`<button class="action" @click=${iK(`${i}Action`,e)}>
+      ${o} ${iz(i)}
+    </button>`,anchor:(e,i,o=null)=>x` <a
+      href="${iR(e.items)}"
+      class="button action"
+      @click="${iK(`${i}Action`,e)}"
+    >
+      ${o} ${iz(i)}
+    </a>`,actionsCommon:e=>null,actionsToplist:e=>iV.action(e,"remove",iM.minus),actionsNotToplist:e=>iV.action(e,"add",iM.plus),actions:e=>[iV.actionsCommon(e),e.isTopList?iV.actionsToplist(e):iV.actionsNotToplist(e)],item:e=>(i,o)=>(e={...e,itemIndex:o,item:i},x`<li class="list-item">
       <details>
         <summary>
           ${iH(iD(i,{target:"_blank"}))}
-          ${iP(i)}
+          ${iO(i)}
         </summary>
-        ${iW.actions(e)}
+        ${iV.actions(e)}
       </details>
-    </li>`),items:e=>e.items.map(iW.item(e)),list:e=>(i,o)=>{var t,n,s,r,a,c;return e={...e,...i,isTopList:(0,iL.isNil)(o)?e.isTopList:0===o,listIndex:o},x`<article class="list">
-      ${t=e.isTopList,n=()=>x` <h1 id="toplist">${iq("appTitle")}</h1>
-            <form @submit="${iU("addItem",e)}">
-              <label>${iq("newItem")}</label>
+    </li>`),items:e=>e.items.map(iV.item(e)),list:e=>(i,o)=>{var t,n,s,r,a,c;return e={...e,...i,isTopList:(0,iL.isNil)(o)?e.isTopList:0===o,listIndex:o},x`<article class="list">
+      ${t=e.isTopList,n=()=>x` <h1 id="toplist">${iz("appTitle")}</h1>
+            <form @submit="${iK("addItem",e)}">
+              <label>${iz("newItem")}</label>
               <input required id="addItemInput" />
-              <input type="submit" value="${iq("addItem")}" />
+              <input type="submit" value="${iz("addItem")}" />
             </form>`,t?n(t):void 0}
 
       <ul>
-        ${iW.items(e)}
+        ${iV.items(e)}
       </ul>
       <details>
-        <summary>${iq("listActions")}</summary>
+        <summary>${iz("listActions")}</summary>
 
-        ${s=e.isTopList,r=()=>iW.action(e,"newList",iM.plus),s?r(s):void 0}
-        ${a=!e.isTopList,c=()=>iW.action(e,"raise",iM.up),a?c(a):void 0}
-        ${iW.action(e,"shareList",iM.share)}
-        ${iW.action(e,"qrShareList",iM.qr)}
+        ${s=e.isTopList,r=()=>iV.action(e,"newList",iM.plus),s?r(s):void 0}
+        ${a=!e.isTopList,c=()=>iV.action(e,"raise",iM.up),a?c(a):void 0}
+        ${iV.anchor(e,"shareList",iM.share)}
+        ${iV.anchor(e,"qrShareList",iM.qr)}
       </details>
-    </article> `},lists:e=>e.lists.map(iW.list(e))},iV=e=>{let i=i2(e),t=new(o(ih))({content:i,container:"svg-viewbox",join:!0}).svg();document.getElementById("qr-code").innerHTML=t,window.qrCodeDialog.showModal()},iG=Symbol("rendered");function iQ(e){W(x`
+    </article> `},lists:e=>e.lists.map(iV.list(e))},iG=Symbol("rendered");function iQ(e){W(x`
       <p class="notice notice--assertive">
         ${e?.message??"An unknown error occurred."}
         <button @click=${i3}>Hard Refresh App</button>
       </p>
-    `,window.error)}window.addEventListener("unhandledrejection",function(e){iQ(e),console.error(e)}),window.addEventListener("error",e=>{if(!e[iG])throw e[iG]=!0,iQ(e),e},!0),async function(){if(window.localStorage.version!==im.version){let{migrate:e}=await r("fhlbu"),{migrations:i}=await r("6xxtQ");await e(i(),window.localStorage.version,im.version)}}();const iY=i=>{e.lists=(0,iL.moveItemToTop)(e.lists,i),window.toplist.scrollIntoView(),i0()};try{if(!localStorage.data)throw Error("Not in localStorage.data");e=JSON.parse(localStorage.data)}catch(i){localStorage.removeItem("data"),e={lists:[]}}const iJ=()=>({created:new Date().toISOString(),items:[]});e.lists[0]=e.lists[0]??iJ();const iX=({target:i,detail:{itemIndex:o,isTopList:t}})=>{t?e.lists[0].items.splice(o,1):e.lists[0].items.unshift(i.value),i0()},iZ=async e=>{if(navigator.clipboard&&navigator.clipboard.writeText)try{await navigator.clipboard.writeText(e),console.log("Text successfully copied to clipboard")}catch(i){console.error("Failed to copy text using Clipboard API: ",i),i1(e)}else console.warn("Clipboard API not supported. Falling back to prompt."),i1(e)},i1=e=>{try{prompt("Copy the text below:",e),console.log("Text successfully copied to clipboard via prompt")}catch(e){console.error("Failed to copy text via prompt: ",e)}},i3=async()=>{"serviceWorker"in navigator&&navigator.serviceWorker.controller&&(await navigator.serviceWorker.ready).active.postMessage({action:"clearCache"}),setTimeout(()=>location.reload(),200)},i2=e=>{let i=new URL(window.location.pathname,window.location.origin);return i.hash=JSON.stringify(e),i.toString()},i8={addItem:i=>{i.preventDefault();let o=i.target.querySelector("input");e.lists[0].items.unshift(o.value),o.value="",i0()},addAction(i){e.lists[0].items.unshift(i.detail.item),i0()},removeAction:e=>iX(e),shareListAction:e=>{iZ(i2(e.detail.items))},newListAction:i=>{if(0===e.lists[0].items.length){window.toplist.scrollIntoView(),window.addItemInput.focus();return}e.lists.unshift(iJ()),window.toplist.scrollIntoView(),i0()},updateAppAction:i3,raiseAction:e=>{iY(e.detail.listIndex)},qrShareListAction:e=>iV(e.detail.items),clearListsAction(){confirm("Are you sure you want to delete all lists?")&&(localStorage.clear(),location.reload())}};function i0(){localStorage.data=JSON.stringify(e),W(iW.app(e,i8),window.app)}i0();var i4={};i4=new URL("service-worker.js",import.meta.url).toString(),(0,iL.tryReject)(async function(){if("serviceWorker"in navigator)try{let e=await navigator.serviceWorker.register(i4);console.log("Service Worker registered with scope:",e.scope)}catch(e){console.error("Service Worker registration failed:",e)}let e=new URL(window.location.href),i=e.searchParams.get("append"),o=(0,iL.tryCatch)(()=>i?JSON.parse(i):JSON.parse(decodeURIComponent(window.location.hash).substring(1)),e=>{console.error(e)});if(o){W(x`<div @action="${iK(i8)}">
-        ${iW.list({isTopList:!1})({items:o})}
+    `,window.error)}window.addEventListener("unhandledrejection",function(e){iQ(e),console.error(e)}),window.addEventListener("error",e=>{if(!e[iG])throw e[iG]=!0,iQ(e),e},!0),async function(){if(window.localStorage.version!==im.version){let{migrate:e}=await r("fhlbu"),{migrations:i}=await r("6xxtQ");await e(i(),window.localStorage.version,im.version)}}();const iY=i=>{e.lists=(0,iL.moveItemToTop)(e.lists,i),window.toplist.scrollIntoView(),i8()};try{if(!localStorage.data)throw Error("Not in localStorage.data");e=JSON.parse(localStorage.data)}catch(i){localStorage.removeItem("data"),e={lists:[]}}const iJ=()=>({created:new Date().toISOString(),items:[]});e.lists[0]=e.lists[0]??iJ();const iX=({target:i,detail:{itemIndex:o,isTopList:t}})=>{t?e.lists[0].items.splice(o,1):e.lists[0].items.unshift(i.value),i8()},iZ=async e=>{if(navigator.clipboard&&navigator.clipboard.writeText)try{await navigator.clipboard.writeText(e),console.log("Text successfully copied to clipboard")}catch(i){console.error("Failed to copy text using Clipboard API: ",i),i1(e)}else console.warn("Clipboard API not supported. Falling back to prompt."),i1(e)},i1=e=>{try{prompt("Copy the text below:",e),console.log("Text successfully copied to clipboard via prompt")}catch(e){console.error("Failed to copy text via prompt: ",e)}},i3=async()=>{"serviceWorker"in navigator&&navigator.serviceWorker.controller&&(await navigator.serviceWorker.ready).active.postMessage({action:"clearCache"}),setTimeout(()=>location.reload(),200)},i2={addItem:i=>{i.preventDefault();let o=i.target.querySelector("input");e.lists[0].items.unshift(o.value),o.value="",i8()},addAction(i){e.lists[0].items.unshift(i.detail.item),i8()},removeAction:e=>iX(e),shareListAction:e=>{iZ(e.target.href)},newListAction:i=>{if(0===e.lists[0].items.length){window.toplist.scrollIntoView(),window.addItemInput.focus();return}e.lists.unshift(iJ()),window.toplist.scrollIntoView(),i8()},updateAppAction:i3,raiseAction:e=>{iY(e.detail.listIndex)},qrShareListAction:e=>{let i=e.target.href,t=new(o(ih))({content:i,container:"svg-viewbox",join:!0}).svg();document.getElementById("qr-code").innerHTML=t,window.qrCodeDialog.showModal()},clearListsAction(){confirm("Are you sure you want to delete all lists?")&&(localStorage.clear(),location.reload())}};function i8(){localStorage.data=JSON.stringify(e),W(iV.app(e,i2),window.app)}i8();var i0={};i0=new URL("service-worker.js",import.meta.url).toString(),(0,iL.tryReject)(async function(){if("serviceWorker"in navigator)try{let e=await navigator.serviceWorker.register(i0);console.log("Service Worker registered with scope:",e.scope)}catch(e){console.error("Service Worker registration failed:",e)}let e=new URL(window.location.href),i=e.searchParams.get("append"),o=(0,iL.tryCatch)(()=>i?JSON.parse(i):JSON.parse(decodeURIComponent(window.location.hash).substring(1)),e=>{console.error(e)});if(o){W(x`<div @action="${iW(i2)}">
+        ${iV.list({isTopList:!1})({items:o})}
       </div>`,window.preview);let{dialog:i}=window;i.showModal(),i.addEventListener("close",()=>{e.searchParams.delete("append"),e.hash="",window.history.replaceState(null,document.title,e.toString())},{once:!0}),i.addEventListener("click",e=>{e.target==i&&i.close()},{once:!0}),i.showModal()}});
-//# sourceMappingURL=index.30007af8.js.map
+//# sourceMappingURL=index.91a1f025.js.map
