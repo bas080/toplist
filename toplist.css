@@ -113,3 +113,14 @@ body:has(dialog[open]) {
   fill: var(--border) !important;
   stroke: var(--border) !important;
 }
+
+.list .actions {
+  font-size: 0;
+}
+
+.list .actions .action,
+.list .actions .action {
+  font-size: 1.15rem;
+  display: inline-block;
+  margin: 0 0.2ch 0.2ch 0;
+}

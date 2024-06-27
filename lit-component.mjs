@@ -258,13 +258,15 @@ const toplist = {
       <details>
         <summary>${tr("listActions")}</summary>
 
-        ${when(vm.isTopList, () => toplist.action(vm, "newList", svg.plus))}
-        ${when(!vm.isTopList, () => [
-          toplist.action(vm, "merge", svg.merge),
-          toplist.action(vm, "raise", svg.up),
-        ])}
-        ${toplist.anchor(vm, "shareList", svg.share)}
-        ${toplist.anchor(vm, "qrShareList", svg.qr)}
+        <div class="actions">
+          ${when(vm.isTopList, () => toplist.action(vm, "newList", svg.plus))}
+          ${when(!vm.isTopList, () => [
+            toplist.action(vm, "merge", svg.merge),
+            toplist.action(vm, "raise", svg.up),
+          ])}
+          ${toplist.anchor(vm, "shareList", svg.share)}
+          ${toplist.anchor(vm, "qrShareList", svg.qr)}
+        </div>
       </details>
     </article> `;
   },
