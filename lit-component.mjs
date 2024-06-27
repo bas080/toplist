@@ -91,6 +91,13 @@ const svg = {
   </svg>`,
 };
 
+const shareUrl = (items) => {
+  const url = new URL(window.location.pathname, window.location.origin);
+  url.hash = JSON.stringify(items);
+
+  return url.toString();
+};
+
 const trs = {
   appTitle: "Top List 🍒",
   newItem: "New Item",
@@ -183,6 +190,15 @@ const toplist = {
       ${svg} ${tr(name)}
     </button>`,
 
+  anchor: (vm, name, svg = null) =>
+    html` <a
+      href="${shareUrl(vm.items)}"
+      class="button action"
+      @click="${emitAction(`${name}Action`, vm)}"
+    >
+      ${svg} ${tr(name)}
+    </a>`,
+
   actionsCommon: (vm) => null,
   actionsToplist: (vm) => toplist.action(vm, "remove", svg.minus),
   actionsNotToplist: (vm) => toplist.action(vm, "add", svg.plus),
@@ -243,8 +259,8 @@ const toplist = {
 
         ${when(vm.isTopList, () => toplist.action(vm, "newList", svg.plus))}
         ${when(!vm.isTopList, () => toplist.action(vm, "raise", svg.up))}
-        ${toplist.action(vm, "shareList", svg.share)}
-        ${toplist.action(vm, "qrShareList", svg.qr)}
+        ${toplist.anchor(vm, "shareList", svg.share)}
+        ${toplist.anchor(vm, "qrShareList", svg.qr)}
       </details>
     </article> `;
   },

@@ -14,8 +14,8 @@ import {
 } from "./util.mjs";
 import { toplist, onAction } from "./lit-component.mjs";
 
-const openQRCode = (items) => {
-  const url = shareUrl(items);
+const openQRCode = (event) => {
+  const url = event.target.href;
 
   const qrcode = new QRCode({
     content: url,
@@ -181,15 +181,8 @@ const clearCache = async () => {
   setTimeout(() => location.reload(), 200);
 };
 
-const shareUrl = (items) => {
-  const url = new URL(window.location.pathname, window.location.origin);
-  url.hash = JSON.stringify(items);
-
-  return url.toString();
-};
-
 const share = (event) => {
-  clipboard(shareUrl(event.detail.items));
+  clipboard(event.target.href);
 };
 
 const lists = (isTopList) => (lists) =>
@@ -210,7 +203,7 @@ const actions = {
   raiseAction: (event) => {
     raiseArchived(event.detail.listIndex);
   },
-  qrShareListAction: (event) => openQRCode(event.detail.items),
+  qrShareListAction: openQRCode,
   clearListsAction() {
     if (confirm("Are you sure you want to delete all lists?")) {
       localStorage.clear();

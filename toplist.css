@@ -53,7 +53,8 @@ ul {
   padding: unset;
 }
 
-.action {
+.action,
+a.action {
   text-align: center;
   background-color: var(--bg);
   color: var(--text);
