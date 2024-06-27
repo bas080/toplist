@@ -100,7 +100,7 @@ const newList = () => ({
 data.lists[0] = data.lists[0] ?? newList();
 
 const mergeItems = (items) => () => {
-  window.dialog.close();
+  window.dialog?.close();
   data.lists[0].items.push(...items);
   rerender();
 };
@@ -192,6 +192,7 @@ const lists = (isTopList) => (lists) =>
 
 const actions = {
   addItem,
+  mergeAction: (event) => mergeItems(event.detail.items),
   addAction(event) {
     data.lists[0].items.unshift(event.detail.item);
     rerender();
