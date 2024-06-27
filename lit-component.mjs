@@ -15,6 +15,15 @@ import {
   moveItemToTop,
 } from "./util.mjs";
 
+const largestWord = (str) => {
+  return str.split(" ").reduce((largest, currentWord) => {
+    return currentWord.length > largest.length ? currentWord : largest;
+  }, "");
+};
+
+// Example usage:
+console.log(largestWord("The quick brown fox jumps over the lazy dog")); // Output: "jumps"
+
 const svg = {
   flame: html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
     <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -127,7 +136,7 @@ const someEmoji = memoize((value) => {
   if (!value) return null;
 
   return findMax(([tag]) => {
-    return -levenshtein(tag, value);
+    return -levenshtein(tag, largestWord(value));
   }, emojiByTag)[1].unicode;
 });
 
