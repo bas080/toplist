@@ -87,26 +87,26 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
         </summary>
         ${iW.actions(e)}
       </details>
-    </li>`),items:e=>e.items.map(iW.item(e)),list:e=>(i,o=0)=>{var t,n,s,r,a,c;return e={...e,...i,isTopList:e.isTopList??0===o,listIndex:o},x`<article class="list">
-        ${t=e.isTopList,n=()=>x` <h1 id="toplist">${iq("appTitle")}</h1>
-              <form @submit="${iU("addItem",e)}">
-                <label>${iq("newItem")}</label>
-                <input required id="addItemInput" />
-                <input type="submit" value="${iq("addItem")}" />
-              </form>`,t?n(t):void 0}
+    </li>`),items:e=>e.items.map(iW.item(e)),list:e=>(i,o)=>{var t,n,s,r,a,c;return e={...e,...i,isTopList:(0,iL.isNil)(o)?e.isTopList:0===o,listIndex:o},x`<article class="list">
+      ${t=e.isTopList,n=()=>x` <h1 id="toplist">${iq("appTitle")}</h1>
+            <form @submit="${iU("addItem",e)}">
+              <label>${iq("newItem")}</label>
+              <input required id="addItemInput" />
+              <input type="submit" value="${iq("addItem")}" />
+            </form>`,t?n(t):void 0}
 
-        <ul>
-          ${iW.items(e)}
-        </ul>
-        <details>
-          <summary>${iq("listActions")}</summary>
+      <ul>
+        ${iW.items(e)}
+      </ul>
+      <details>
+        <summary>${iq("listActions")}</summary>
 
-          ${s=e.isTopList,r=()=>iW.action(e,"newList",iM.plus),s?r(s):void 0}
-          ${a=!e.isTopList,c=()=>iW.action(e,"raise",iM.up),a?c(a):void 0}
-          ${iW.action(e,"shareList",iM.share)}
-          ${iW.action(e,"qrShareList",iM.qr)}
-        </details>
-      </article> `},lists:e=>e.lists.map(iW.list(e))},iV=e=>{let i=i2(e),t=new(o(ih))({content:i,container:"svg-viewbox",join:!0}).svg();document.getElementById("qr-code").innerHTML=t,window.qrCodeDialog.showModal()},iG=Symbol("rendered");function iQ(e){W(x`
+        ${s=e.isTopList,r=()=>iW.action(e,"newList",iM.plus),s?r(s):void 0}
+        ${a=!e.isTopList,c=()=>iW.action(e,"raise",iM.up),a?c(a):void 0}
+        ${iW.action(e,"shareList",iM.share)}
+        ${iW.action(e,"qrShareList",iM.qr)}
+      </details>
+    </article> `},lists:e=>e.lists.map(iW.list(e))},iV=e=>{let i=i2(e),t=new(o(ih))({content:i,container:"svg-viewbox",join:!0}).svg();document.getElementById("qr-code").innerHTML=t,window.qrCodeDialog.showModal()},iG=Symbol("rendered");function iQ(e){W(x`
       <p class="notice notice--assertive">
         ${e?.message??"An unknown error occurred."}
         <button @click=${i3}>Hard Refresh App</button>
@@ -114,4 +114,4 @@ let e;function i(e,i,o,t){Object.defineProperty(e,i,{get:o,set:t,enumerable:!0,c
     `,window.error)}window.addEventListener("unhandledrejection",function(e){iQ(e),console.error(e)}),window.addEventListener("error",e=>{if(!e[iG])throw e[iG]=!0,iQ(e),e},!0),async function(){if(window.localStorage.version!==im.version){let{migrate:e}=await r("fhlbu"),{migrations:i}=await r("6xxtQ");await e(i(),window.localStorage.version,im.version)}}();const iY=i=>{e.lists=(0,iL.moveItemToTop)(e.lists,i),window.toplist.scrollIntoView(),i0()};try{if(!localStorage.data)throw Error("Not in localStorage.data");e=JSON.parse(localStorage.data)}catch(i){localStorage.removeItem("data"),e={lists:[]}}const iJ=()=>({created:new Date().toISOString(),items:[]});e.lists[0]=e.lists[0]??iJ();const iX=({target:i,detail:{itemIndex:o,isTopList:t}})=>{t?e.lists[0].items.splice(o,1):e.lists[0].items.unshift(i.value),i0()},iZ=async e=>{if(navigator.clipboard&&navigator.clipboard.writeText)try{await navigator.clipboard.writeText(e),console.log("Text successfully copied to clipboard")}catch(i){console.error("Failed to copy text using Clipboard API: ",i),i1(e)}else console.warn("Clipboard API not supported. Falling back to prompt."),i1(e)},i1=e=>{try{prompt("Copy the text below:",e),console.log("Text successfully copied to clipboard via prompt")}catch(e){console.error("Failed to copy text via prompt: ",e)}},i3=async()=>{"serviceWorker"in navigator&&navigator.serviceWorker.controller&&(await navigator.serviceWorker.ready).active.postMessage({action:"clearCache"}),setTimeout(()=>location.reload(),200)},i2=e=>{let i=new URL(window.location.pathname,window.location.origin);return i.hash=JSON.stringify(e),i.toString()},i8={addItem:i=>{i.preventDefault();let o=i.target.querySelector("input");e.lists[0].items.unshift(o.value),o.value="",i0()},addAction(i){e.lists[0].items.unshift(i.detail.item),i0()},removeAction:e=>iX(e),shareListAction:e=>{iZ(i2(e.detail.items))},newListAction:i=>{if(0===e.lists[0].items.length){window.toplist.scrollIntoView(),window.addItemInput.focus();return}e.lists.unshift(iJ()),window.toplist.scrollIntoView(),i0()},updateAppAction:i3,raiseAction:e=>{iY(e.detail.listIndex)},qrShareListAction:e=>iV(e.detail.items),clearListsAction(){confirm("Are you sure you want to delete all lists?")&&(localStorage.clear(),location.reload())}};function i0(){localStorage.data=JSON.stringify(e),W(iW.app(e,i8),window.app)}i0();var i4={};i4=new URL("service-worker.js",import.meta.url).toString(),(0,iL.tryReject)(async function(){if("serviceWorker"in navigator)try{let e=await navigator.serviceWorker.register(i4);console.log("Service Worker registered with scope:",e.scope)}catch(e){console.error("Service Worker registration failed:",e)}let e=new URL(window.location.href),i=e.searchParams.get("append"),o=(0,iL.tryCatch)(()=>i?JSON.parse(i):JSON.parse(decodeURIComponent(window.location.hash).substring(1)),e=>{console.error(e)});if(o){W(x`<div @action="${iK(i8)}">
         ${iW.list({isTopList:!1})({items:o})}
       </div>`,window.preview);let{dialog:i}=window;i.showModal(),i.addEventListener("close",()=>{e.searchParams.delete("append"),e.hash="",window.history.replaceState(null,document.title,e.toString())},{once:!0}),i.addEventListener("click",e=>{e.target==i&&i.close()},{once:!0}),i.showModal()}});
-//# sourceMappingURL=index.d28b7d13.js.map
+//# sourceMappingURL=index.30007af8.js.map
