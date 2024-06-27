@@ -213,6 +213,11 @@ const actions = {
 };
 
 function rerender() {
+  // Filter out empty lists besides the toplist.
+  data.lists = data.lists.filter(
+    (list, index) => index === 0 || isNotEmpty(list.items),
+  );
+
   localStorage.data = JSON.stringify(data);
 
   render(toplist.app(data, actions), window.app);
