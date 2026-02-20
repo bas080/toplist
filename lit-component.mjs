@@ -21,10 +21,8 @@ const largestWord = (str) => {
   }, "");
 };
 
-// Example usage:
-console.log(largestWord("The quick brown fox jumps over the lazy dog")); // Output: "jumps"
-
 const svg = {
+  sort: "TODO: SORT",
   flame: html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
     <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
     <path
@@ -109,6 +107,7 @@ const shareUrl = (items) => {
 
 const trs = {
   merge: "Merge",
+  autoSort: "Auto Sort",
   appTitle: "Top List 🍒",
   newItem: "New Item",
   addItem: "Add Item",
@@ -190,6 +189,7 @@ const toplist = {
 
         ${toplist.action(vm, "updateApp", svg.refresh)}
         ${toplist.action(vm, "clearLists", svg.flame)}
+        ${toplist.toggleAction(vm, "autoSort", svg.sort)}
       </details>
       ${toplist.lists(vm)}
     </div>
@@ -199,6 +199,17 @@ const toplist = {
     html`<button class="action" @click=${emitAction(`${name}Action`, vm)}>
       ${svg} ${tr(name)}
     </button>`,
+
+  toggleAction: (vm, name, svg = null) =>
+    html`<label>
+      <input
+        type="checkbox"
+        .checked=${vm.settings.autoSort}
+        class="action"
+        @change=${emitAction(`${name}Action`, vm)}
+      />
+      ${svg} ${tr(name)}
+    </label>`,
 
   anchor: (vm, name, svg = null) =>
     html` <a

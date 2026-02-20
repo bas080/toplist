@@ -92,6 +92,9 @@ try {
   };
 }
 
+// Add settings to the localStorage if not there
+data.settings = data.settings ?? {};
+
 const newList = () => ({
   created: new Date().toISOString(),
   items: [],
@@ -127,6 +130,11 @@ const createList = (event) => {
 
   data.lists.unshift(newList());
   window.toplist.scrollIntoView();
+  rerender();
+};
+
+const toggleAutoSort = (event) => {
+  data.settings.autoSort = !data.settings.autoSort;
   rerender();
 };
 
@@ -198,6 +206,7 @@ const actions = {
     rerender();
   },
   removeAction: (event) => onListItemClick(event),
+  autoSortAction: toggleAutoSort,
   shareListAction: share,
   newListAction: createList,
   updateAppAction: clearCache,
@@ -213,11 +222,24 @@ const actions = {
   },
 };
 
+const simpleCompare = (a, b) =>
+  a.localeCompare(b, undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
+
 function rerender() {
+  console.info("rerender");
   // Filter out empty lists besides the toplist.
   data.lists = data.lists.filter(
     (list, index) => index === 0 || isNotEmpty(list.items),
   );
+
+  if (data.settings.autoSort) {
+    data.lists.forEach((list) => {
+      return list.items.sort(simpleCompare);
+    });
+  }
 
   localStorage.data = JSON.stringify(data);
 
