@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fmt-check": "npx prettier -c **.{mjs,html,css,yml}",
+    "fmt-check": "npx prettier -c *.{mjs,html,css,yml}",
     "fmt": "npm run fmt-check -- -w",
     "build": "npx parcel build --public-url /toplist",
     "serve": "npx parcel serve"

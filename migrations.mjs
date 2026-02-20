@@ -31,9 +31,8 @@ export function migrations() {
 async function assignUsername() {
   // Add a random username if none.
   if (!window.localStorage.username) {
-    const { uniqueNamesGenerator, colors, animals } = await import(
-      "unique-names-generator"
-    );
+    const { uniqueNamesGenerator, colors, animals } =
+      await import("unique-names-generator");
 
     window.localStorage.username = uniqueNamesGenerator({
       dictionaries: [colors, animals],
